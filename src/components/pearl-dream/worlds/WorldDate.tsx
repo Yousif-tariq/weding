@@ -110,22 +110,22 @@ export function WorldDate() {
 
         {/* Futuristic Chamfered Holographic Chronometer Display (Non-Circular) */}
         <div className="future-chamfer-sm relative mt-5 flex w-full flex-col items-center justify-center border border-[#5FD3CC]/50 bg-gradient-to-b from-[#0C3740]/82 to-[#04181D]/90 px-5 py-6 shadow-[0_0_40px_rgba(95,211,204,0.18),inset_0_0_24px_rgba(240,210,156,0.12)]">
-          <span className="text-xs font-semibold tracking-wider text-[#5FD3CC]">
+          <span className="text-base font-bold tracking-wider text-[#5FD3CC] sm:text-lg">
             {event.dayLabelAr}
           </span>
           <time
-            className="mt-1.5 bg-gradient-to-b from-[#FFFFFF] via-[#F5DBA6] to-[#D4A056] bg-clip-text text-3xl font-bold text-transparent sm:text-4xl"
+            className="mt-1.5 bg-gradient-to-b from-[#FFFFFF] via-[#F5DBA6] to-[#D4A056] bg-clip-text text-4xl font-bold text-transparent sm:text-[42px]"
             style={{ fontFamily: "var(--font-display-ar)" }}
           >
             {event.gregorianDisplayAr}
           </time>
           {hijriDisplay && (
-            <span className="mt-1 text-xs font-medium text-[#CBE6E4]">
+            <span className="mt-1.5 text-sm font-medium text-[#CBE6E4]">
               {hijriDisplay}
             </span>
           )}
-          <div className="mt-3.5 inline-flex items-center gap-1.5 border border-[#F0D29C]/50 bg-white/10 px-4 py-1 text-xs font-bold text-[#FFF7E6]">
-            <Clock className="h-3.5 w-3.5 text-[#5FD3CC]" />
+          <div className="mt-3.5 inline-flex items-center gap-1.5 border border-[#F0D29C]/50 bg-white/10 px-4 py-1.5 text-sm font-bold text-[#FFF7E6]">
+            <Clock className="h-4 w-4 text-[#5FD3CC]" />
             <span>{event.timeDisplayAr}</span>
           </div>
         </div>

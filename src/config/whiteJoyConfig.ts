@@ -93,7 +93,7 @@ export const WHITE_JOY_CONFIG: WhiteJoyConfig = {
   },
   event: {
     isoDate: "2026-12-03T20:00:00+03:00",
-    dayLabelAr: "يوم الخميس المبارك",
+    dayLabelAr: "يوم الخميس",
     gregorianDisplayAr: "٣ ديسمبر ٢٠٢٦ م",
     timeDisplayAr: "الساعة ٨:٠٠ مساءً",
     receptionTimeAr: "الاستقبال ٧:٣٠ مساءً",
