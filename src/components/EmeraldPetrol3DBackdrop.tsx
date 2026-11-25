@@ -109,12 +109,14 @@ export function EmeraldPetrol3DBackdrop({
   const webglRef = useRef<HTMLDivElement | null>(null);
   const cameraStateRef = useRef<ExperienceCameraState>(cameraState);
   const [loopDip, setLoopDip] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
 
   useEffect(() => {
     cameraStateRef.current = cameraState;
   }, [cameraState]);
 
-  // Configure slow-motion playback & seamless loop dip on the real MP4 video
+  // Configure slow-motion playback, iOS defaultMuted fix, and hide video until actually playing
+  // (prevents iOS Safari / Android from ever showing a native play button icon in the background)
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -123,14 +125,31 @@ export function EmeraldPetrol3DBackdrop({
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
+    video.defaultMuted = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
     video.playbackRate = prefersReduced ? 0.25 : 0.58;
 
     const tryPlay = () => {
+      video.muted = true;
       video.playbackRate = prefersReduced ? 0.25 : 0.58;
-      void video.play().catch(() => {});
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {
+          // Stay hidden if browser Low Power Mode blocks autoplay; retry on first touch
+        });
+      }
     };
 
     tryPlay();
+
+    const onPlaying = () => setVideoPlaying(true);
+    const onPause = () => {
+      if (!document.hidden) tryPlay();
+    };
 
     const onTimeUpdate = () => {
       if (!video.duration || !Number.isFinite(video.duration)) return;
@@ -146,14 +165,26 @@ export function EmeraldPetrol3DBackdrop({
       }
     };
 
+    const onFirstGesture = () => {
+      if (video.paused) tryPlay();
+    };
+
+    video.addEventListener("playing", onPlaying);
     video.addEventListener("canplay", tryPlay);
+    video.addEventListener("pause", onPause);
     video.addEventListener("timeupdate", onTimeUpdate);
     document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pointerdown", onFirstGesture, { passive: true });
+    window.addEventListener("touchstart", onFirstGesture, { passive: true });
 
     return () => {
+      video.removeEventListener("playing", onPlaying);
       video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("pause", onPause);
       video.removeEventListener("timeupdate", onTimeUpdate);
       document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pointerdown", onFirstGesture);
+      window.removeEventListener("touchstart", onFirstGesture);
     };
   }, []);
 
@@ -457,11 +488,11 @@ export function EmeraldPetrol3DBackdrop({
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#051C21]"
     >
-      {/* Layer 1: Real Verified Slow-Motion Emerald Silk MP4 Video (Mixkit #1842) */}
+      {/* Layer 1: Real Verified Slow-Motion Emerald Silk MP4 Video (Hidden until playing so no play button ever shows) */}
       <div
         ref={videoWrapRef}
         className="absolute inset-0 h-full w-full scale-[1.12] will-change-transform transition-opacity duration-700"
-        style={{ opacity: loopDip ? 0.84 : 1 }}
+        style={{ opacity: !videoPlaying ? 0 : loopDip ? 0.84 : 1 }}
       >
         <video
           ref={videoRef}
@@ -470,8 +501,13 @@ export function EmeraldPetrol3DBackdrop({
           muted
           loop
           playsInline
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
+          tabIndex={-1}
+          aria-hidden="true"
           preload="auto"
-          className="h-full w-full object-cover"
+          className="bg-ambient-video pointer-events-none h-full w-full object-cover"
           style={{
             filter:
               "brightness(0.46) contrast(1.18) saturate(1.12) hue-rotate(18deg)",

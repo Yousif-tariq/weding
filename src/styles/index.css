@@ -155,6 +155,18 @@
   scrollbar-width: none;
 }
 
+/* Permanently hide native iOS/Safari/Android video play-button overlays on background videos */
+video.bg-ambient-video::-webkit-media-controls,
+video.bg-ambient-video::-webkit-media-controls-enclosure,
+video.bg-ambient-video::-webkit-media-controls-panel,
+video.bg-ambient-video::-webkit-media-controls-play-button,
+video.bg-ambient-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Luxury 3D Ruby Mechanical Keyboard Keycap Button */
 .ruby-keycap-btn {
   position: relative;
