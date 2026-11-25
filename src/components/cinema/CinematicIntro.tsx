@@ -89,10 +89,10 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
         <button
           type="button"
           onClick={onComplete}
-          className="inline-flex items-center gap-1.5 rounded-full border border-white/85 bg-white/90 px-3.5 py-1.5 text-xs font-semibold text-[#192044] shadow-sm backdrop-blur-md transition hover:border-[#D4A056] hover:bg-white"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-[#F0D29C]/45 bg-[#062228]/80 px-3.5 py-1.5 text-xs font-semibold text-[#FDFBFF] shadow-[0_8px_24px_rgba(2,14,18,0.45)] backdrop-blur-xl transition hover:border-[#5FD3CC] hover:bg-[#092F38]/90"
         >
           <span>{WHITE_JOY_CONFIG.intro.skipLabel}</span>
-          <SkipForward className="h-3.5 w-3.5 text-[#D4A056]" />
+          <SkipForward className="h-3.5 w-3.5 text-[#F0D29C]" />
         </button>
       </div>
 

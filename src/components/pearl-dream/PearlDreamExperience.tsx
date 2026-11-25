@@ -174,14 +174,14 @@ export function PearlDreamExperience({
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={() => goToWorld("hub")}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/95 bg-white/82 px-3.5 py-2 text-xs font-bold text-[#1F2E47] shadow-[0_8px_24px_rgba(64,86,108,0.12)] backdrop-blur-md transition hover:border-[#D8C19A] hover:bg-white"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#F0D29C]/45 bg-[#062228]/80 px-3.5 py-2 text-xs font-bold text-[#FDFBFF] shadow-[0_8px_24px_rgba(2,14,18,0.45)] backdrop-blur-xl transition hover:border-[#5FD3CC] hover:bg-[#092F38]/90"
           >
-            <ArrowRight className="h-3.5 w-3.5 text-[#C89F54]" />
+            <ArrowRight className="h-3.5 w-3.5 text-[#F0D29C]" />
             <span>البوابات</span>
           </motion.button>
         ) : (
           <span
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/95 bg-white/80 text-xs font-bold text-[#1F2E47] shadow-xs backdrop-blur-md"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#F0D29C]/45 bg-[#062228]/80 text-xs font-bold text-[#F0D29C] shadow-[0_8px_24px_rgba(2,14,18,0.45)] backdrop-blur-xl"
             style={{ fontFamily: "var(--font-calligraphy)" }}
           >
             {WHITE_JOY_CONFIG.brand.monogramAr}
@@ -194,9 +194,9 @@ export function PearlDreamExperience({
           onClick={onReplay}
           title="إعادة التجربة من البداية"
           aria-label="إعادة التجربة من البداية"
-          className="mr-auto ml-12 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/95 bg-white/80 text-[#1F2E47] shadow-xs backdrop-blur-md transition hover:border-[#D8C19A] hover:bg-white"
+          className="mr-auto ml-12 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#F0D29C]/45 bg-[#062228]/80 text-[#F0D29C] shadow-[0_8px_24px_rgba(2,14,18,0.45)] backdrop-blur-xl transition hover:border-[#5FD3CC] hover:bg-[#092F38]/90"
         >
-          <RotateCcw className="h-4 w-4 text-[#C89F54]" />
+          <RotateCcw className="h-4 w-4" />
         </button>
       </header>
 
@@ -313,22 +313,22 @@ export function PearlDreamExperience({
             <motion.span
               key={activeMeta.id}
               initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 0.9, y: 0 }}
+              animate={{ opacity: 0.96, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.35, ease: LUXURY_EASE }}
-              className="rounded-full border border-white/90 bg-white/90 px-3.5 py-0.5 text-[11px] font-bold text-[#192044] shadow-sm backdrop-blur-md"
+              className="rounded-xl border border-[#5FD3CC]/45 bg-[#062228]/82 px-3.5 py-0.5 text-[11px] font-bold text-[#F0D29C] shadow-md backdrop-blur-xl"
             >
               {activeMeta.titleAr}
             </motion.span>
           )}
         </AnimatePresence>
 
-        {/* Connected Pearl Thread */}
-        <div className="relative flex items-center gap-5 rounded-full border border-white/95 bg-white/74 px-5 py-2.5 shadow-[0_14px_34px_rgba(64,86,108,0.12)] backdrop-blur-xl">
-          {/* Connecting Champagne-Gold Thread */}
+        {/* Connected Futuristic Emerald-Glass Navigation Dock */}
+        <div className="relative flex items-center gap-5 rounded-2xl border border-[#F0D29C]/40 bg-[#062228]/80 px-5 py-2.5 shadow-[0_14px_34px_rgba(2,14,18,0.55)] backdrop-blur-xl">
+          {/* Connecting Champagne-Turquoise Thread */}
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 right-7 left-7 h-[1px] -translate-y-1/2 bg-gradient-to-l from-[#D8C19A]/40 via-[#D8C19A]/85 to-[#D8C19A]/40"
+            className="pointer-events-none absolute top-1/2 right-7 left-7 h-[1px] -translate-y-1/2 bg-gradient-to-l from-[#5FD3CC]/35 via-[#F0D29C]/75 to-[#5FD3CC]/35"
           />
 
           {DREAM_GATES_META.map((gate) => {
@@ -346,15 +346,15 @@ export function PearlDreamExperience({
                 {isActive && (
                   <motion.span
                     layoutId="pearl-nav-halo"
-                    className="absolute -inset-1 rounded-full bg-[#D8C19A]/40 blur-[3px]"
+                    className="absolute -inset-1 rounded-sm bg-[#5FD3CC]/35 blur-[3px]"
                     transition={{ type: "spring", stiffness: 320, damping: 28 }}
                   />
                 )}
                 <span
-                  className={`block rounded-full border transition-all duration-300 ${
+                  className={`block rotate-45 border transition-all duration-300 ${
                     isActive
-                      ? "h-3.5 w-3.5 border-[#C89F54] bg-gradient-to-br from-white via-[#FAF6EE] to-[#D8C19A] shadow-[0_0_12px_rgba(200,159,84,0.65)]"
-                      : "h-2.5 w-2.5 border-white bg-[#40566C]/30 group-hover:scale-125 group-hover:bg-[#C89F54]/75"
+                      ? "h-3 w-3 border-[#FFF5DE] bg-gradient-to-br from-[#FFF5DE] via-[#F0D29C] to-[#D4A056] shadow-[0_0_12px_rgba(240,210,156,0.75)]"
+                      : "h-2 w-2 border-[#5FD3CC]/75 bg-[#0A353E] group-hover:scale-125 group-hover:border-[#F0D29C]"
                   }`}
                 />
               </button>
