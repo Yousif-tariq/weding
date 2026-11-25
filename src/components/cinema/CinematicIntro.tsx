@@ -9,7 +9,10 @@ interface CinematicIntroProps {
   onComplete: () => void;
 }
 
-type IntroBeat = "quote" | "invite-line" | "couple-card";
+type IntroBeat = "quote" | "welcome-note" | "invite-line" | "couple-card";
+
+const WELCOME_NOTE_LINE_1 = "في ليلةٍ تكتمل بها الأفراح وتزدان بها القلوب";
+const WELCOME_NOTE_LINE_2 = "ننتظر حضوركم لتشاركونا فرحتنا";
 
 export function CinematicIntro({ onComplete }: CinematicIntroProps) {
   const [beat, setBeat] = useState<IntroBeat>("quote");
@@ -17,13 +20,13 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
   const prefersReduced = useReducedMotion();
   const quote = WHITE_JOY_CONFIG.intro.poeticLine;
 
-  // Step 1: Type «بعض الليالي لا تشبه سواها... لأنها تُكتب في القلب إلى الأبد.» FIRST
+  // Step 1: Type the 4 Sudanese poetic verses FIRST
   useEffect(() => {
     if (beat !== "quote") return;
 
     if (prefersReduced) {
       setTypedCount(quote.length);
-      const t = window.setTimeout(() => setBeat("invite-line"), 700);
+      const t = window.setTimeout(() => setBeat("welcome-note"), 800);
       return () => window.clearTimeout(t);
     }
 
@@ -35,32 +38,41 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
       if (cancelled) return;
       if (idx >= quote.length) {
         timer = window.setTimeout(() => {
-          if (!cancelled) setBeat("invite-line");
-        }, 950);
+          if (!cancelled) setBeat("welcome-note");
+        }, 1150);
         return;
       }
       const ch = quote[idx];
       idx += 1;
       setTypedCount(idx);
-      if (ch !== " " && ch !== ".") {
+      if (ch !== " " && ch !== "\n" && ch !== ".") {
         cinemaSound.playTypingClick();
       }
-      timer = window.setTimeout(step, ch === " " ? 34 : 48);
+      const delay = ch === "\n" ? 260 : ch === " " ? 32 : 44;
+      timer = window.setTimeout(step, delay);
     };
 
-    timer = window.setTimeout(step, 320);
+    timer = window.setTimeout(step, 300);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
   }, [beat, quote, prefersReduced]);
 
-  // Step 2 -> Step 3 -> Direct Transition to Envelope
+  // Step 2 (Enchanted Welcome Note) -> Step 3 (Invite Line) -> Step 4 (Couple Card) -> Envelope
   useEffect(() => {
+    if (beat === "welcome-note") {
+      const t = window.setTimeout(
+        () => setBeat("invite-line"),
+        prefersReduced ? 900 : 2800
+      );
+      return () => window.clearTimeout(t);
+    }
+
     if (beat === "invite-line") {
       const t = window.setTimeout(
         () => setBeat("couple-card"),
-        prefersReduced ? 500 : 1550
+        prefersReduced ? 500 : 1450
       );
       return () => window.clearTimeout(t);
     }
@@ -68,7 +80,7 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
     if (beat === "couple-card") {
       const t = window.setTimeout(
         onComplete,
-        prefersReduced ? 1200 : 3000
+        prefersReduced ? 1200 : 2900
       );
       return () => window.clearTimeout(t);
     }
@@ -100,30 +112,33 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
       <motion.div
         aria-hidden="true"
         initial={{ scale: 0.35, opacity: 0 }}
-        animate={{ scale: showCard ? 1.45 : 0.95, opacity: 0.55 }}
+        animate={{
+          scale: showCard ? 1.45 : beat === "welcome-note" ? 1.25 : 0.95,
+          opacity: 0.55,
+        }}
         transition={{ duration: 1.4, ease: LUXURY_EASE }}
         className="pointer-events-none absolute top-1/2 left-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-radial from-[#F0D29C]/35 via-[#5FD3CC]/18 to-transparent blur-3xl"
       />
 
       <div className="relative z-10 flex w-full max-w-md flex-col items-center justify-center">
         <AnimatePresence mode="wait">
-          {/* BEAT 1: Poetic Typewriter Line FIRST */}
+          {/* BEAT 1: Sudanese Poetic Verses Typed Live */}
           {beat === "quote" && (
             <motion.div
               key="beat-quote"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -18, filter: "blur(8px)" }}
-              transition={{ duration: 0.7, ease: LUXURY_EASE }}
+              exit={{ opacity: 0, y: -22, filter: "blur(10px)" }}
+              transition={{ duration: 0.75, ease: LUXURY_EASE }}
               className="flex max-w-sm flex-col items-center px-2"
             >
               <Sparkles className="mb-4 h-5 w-5 text-[#F0D29C] opacity-85" />
               <p
-                className="min-h-[84px] text-2xl leading-relaxed font-semibold text-[#FDFBFF] drop-shadow-[0_3px_18px_rgba(4,24,29,0.95)] sm:text-3xl"
+                className="min-h-[156px] whitespace-pre-line text-2xl leading-[1.9] font-semibold text-[#FDFBFF] drop-shadow-[0_3px_18px_rgba(4,24,29,0.95)] sm:text-3xl"
                 style={{ fontFamily: "var(--font-display-ar)" }}
                 aria-live="polite"
               >
-                «{quote.slice(0, typedCount)}»
+                {quote.slice(0, typedCount)}
                 {typedCount < quote.length && (
                   <span className="mr-1 inline-block h-[1em] w-[2px] translate-y-1 animate-pulse bg-[#F0D29C]" />
                 )}
@@ -131,7 +146,59 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
             </motion.div>
           )}
 
-          {/* BEAT 2 & 3: «نتشرّف بدعوتكم لزواج» THEN Haute-Couture Smoked-Emerald Crystal Card */}
+          {/* BEAT 2: Enchanted Luminous Welcome Note Reveal */}
+          {beat === "welcome-note" && (
+            <motion.div
+              key="beat-welcome-note"
+              initial={{ opacity: 0, y: 24, scale: 0.93, filter: "blur(12px)" }}
+              animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -20, scale: 1.03, filter: "blur(10px)" }}
+              transition={{ duration: 0.95, ease: LUXURY_EASE }}
+              className="future-glass-panel future-chamfer relative flex max-w-md flex-col items-center overflow-hidden px-7 py-8 sm:px-9 sm:py-9"
+            >
+              {!prefersReduced && (
+                <span
+                  aria-hidden="true"
+                  className="holo-sweep-beam pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-[#F0D29C]/35 to-transparent"
+                />
+              )}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute top-0 inset-x-10 h-[2px] bg-gradient-to-r from-transparent via-[#F0D29C] to-transparent"
+              />
+
+              <Sparkles className="mb-3 h-5 w-5 text-[#F0D29C]" />
+
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.85, delay: 0.15, ease: LUXURY_EASE }}
+                className="text-xl leading-relaxed font-bold text-[#FDFBFF] sm:text-2xl"
+                style={{ fontFamily: "var(--font-display-ar)" }}
+              >
+                {WELCOME_NOTE_LINE_1}
+              </motion.p>
+
+              <motion.div
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.7, delay: 0.4, ease: LUXURY_EASE }}
+                className="my-3.5 h-[1px] w-28 bg-gradient-to-r from-transparent via-[#F0D29C] to-transparent"
+              />
+
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.85, delay: 0.55, ease: LUXURY_EASE }}
+                className="bg-gradient-to-b from-[#FFF8E6] via-[#F2D59B] to-[#D4A056] bg-clip-text text-2xl font-bold text-transparent sm:text-3xl"
+                style={{ fontFamily: "var(--font-display-ar)" }}
+              >
+                {WELCOME_NOTE_LINE_2}
+              </motion.p>
+            </motion.div>
+          )}
+
+          {/* BEAT 3 & 4: «نتشرّف بدعوتكم لزواج» THEN Haute-Couture Smoked-Emerald Crystal Card */}
           {showInviteLine && (
             <motion.div
               key="beat-invite-and-card"
@@ -175,7 +242,7 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
                     : { opacity: 0, y: 38, scale: 0.9, filter: "blur(10px)" }
                 }
                 transition={{ duration: 1.05, ease: LUXURY_EASE }}
-                className="relative mt-5 w-full max-w-[310px] overflow-hidden rounded-[28px] border border-[#F0D29C]/45 bg-gradient-to-b from-[#0E363E]/78 via-[#072329]/86 to-[#041519]/92 px-8 py-10 shadow-[0_32px_80px_rgba(2,14,18,0.68),inset_0_1px_1px_rgba(255,255,255,0.28)] backdrop-blur-2xl sm:max-w-[340px]"
+                className="future-glass-panel future-chamfer relative mt-5 w-full max-w-[310px] overflow-hidden px-8 py-10 sm:max-w-[340px]"
               >
                 {/* Slow Diagonal Liquid-Gold Shimmer Sweep */}
                 {!prefersReduced && showCard && (
@@ -188,27 +255,21 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
                   />
                 )}
 
+                {/* Top Glowing Prism Edge */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-0 inset-x-10 h-[2px] bg-gradient-to-r from-transparent via-[#5FD3CC] to-transparent"
+                />
+
                 {/* Subtle Top Radial Specular Light Reflection */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute -top-20 left-1/2 h-40 w-64 -translate-x-1/2 rounded-full bg-radial from-[#5FD3CC]/22 via-[#F0D29C]/12 to-transparent blur-2xl"
                 />
 
-                {/* Architectural Parisian Luxury Hairline Corner Brackets */}
-                <span aria-hidden="true" className="pointer-events-none absolute top-4 right-4 h-5 w-5 border-t border-r border-[#F0D29C]/65" />
-                <span aria-hidden="true" className="pointer-events-none absolute top-4 left-4 h-5 w-5 border-t border-l border-[#F0D29C]/65" />
-                <span aria-hidden="true" className="pointer-events-none absolute right-4 bottom-4 h-5 w-5 border-r border-b border-[#F0D29C]/65" />
-                <span aria-hidden="true" className="pointer-events-none absolute bottom-4 left-4 h-5 w-5 border-b border-l border-[#F0D29C]/65" />
-
-                {/* Inner Subtle Hairline Frame */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-4 rounded-[18px] border border-white/10"
-                />
-
                 <div className="relative z-10 flex flex-col items-center">
                   {/* Top Golden Monogram Crest */}
-                  <span className="mb-4 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#F0D29C]/50 bg-[#F0D29C]/10 text-xs text-[#F5DBA6]">
+                  <span className="mb-4 inline-flex h-8 w-8 items-center justify-center border border-[#F0D29C]/50 bg-[#F0D29C]/10 text-xs text-[#F5DBA6]">
                     ✦
                   </span>
 
@@ -223,13 +284,13 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
                     {WHITE_JOY_CONFIG.brand.groomAr}
                   </motion.h1>
 
-                  {/* Ultra-Fine Golden Ampersand Medallion Divider */}
+                  {/* Ultra-Fine Golden Ampersand Divider */}
                   <div
                     aria-hidden="true"
                     className="my-3 flex w-full items-center justify-center gap-3"
                   >
                     <span className="h-[1px] flex-1 bg-gradient-to-l from-[#F0D29C]/75 to-transparent" />
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full border border-[#F0D29C]/50 text-xs font-semibold text-[#F5DBA6]">
+                    <span className="flex h-7 w-7 items-center justify-center border border-[#F0D29C]/50 text-xs font-semibold text-[#F5DBA6]">
                       &amp;
                     </span>
                     <span className="h-[1px] flex-1 bg-gradient-to-r from-[#F0D29C]/75 to-transparent" />
@@ -247,7 +308,7 @@ export function CinematicIntro({ onComplete }: CinematicIntroProps) {
                   </motion.p>
 
                   {/* Engraved Bottom Date Line */}
-                  <div className="mt-6 flex items-center gap-2 rounded-full border border-[#F0D29C]/35 bg-white/8 px-4 py-1.5 text-[11px] font-medium tracking-wider text-[#D9F0EE]">
+                  <div className="mt-6 flex items-center gap-2 border border-[#F0D29C]/35 bg-white/8 px-4 py-1.5 text-[11px] font-medium tracking-wider text-[#D9F0EE]">
                     <span>{WHITE_JOY_CONFIG.event.dayLabelAr}</span>
                     <span className="text-[#F0D29C]">·</span>
                     <span>{WHITE_JOY_CONFIG.event.gregorianDisplayAr}</span>

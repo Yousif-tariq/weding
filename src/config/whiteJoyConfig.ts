@@ -78,7 +78,8 @@ export const WHITE_JOY_CONFIG: WhiteJoyConfig = {
     families: ["آل عبد الله يوسف زكريا", "آل مبارك محمد عبد الله"],
   },
   intro: {
-    poeticLine: "بعض الليالي لا تشبه سواها... لأنها تُكتب في القلب إلى الأبد.",
+    poeticLine:
+      "وزول يحلم بالعديلة\nوفرحة الريد الطويل\nوناس تجيهو تغنّي ليهو\nناس تبارك وناس تهنّئ",
     skipLabel: "تخطّي",
     openButtonLabel: "افتحوا دعوتنا",
   },
