@@ -98,7 +98,7 @@ export function WorldDate() {
 
         <span className="inline-flex items-center gap-1.5 text-[10.5px] font-semibold tracking-[0.18em] text-[#5FD3CC]">
           <Sparkles className="h-3 w-3 text-[#F0D29C]" />
-          <span>التقويم السماوي للفرح</span>
+          <span>على موعدٍ مع البهجة</span>
         </span>
 
         <h2
