@@ -162,19 +162,19 @@ export function AmbientMusicController({
         onClick={handleToggle}
         aria-label={isPlaying ? "إيقاف الموسيقى" : "تشغيل الموسيقى"}
         title={isPlaying ? "إيقاف الموسيقى" : "تشغيل الموسيقى"}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#F0D29C]/45 bg-[#062228]/80 text-[#F0D29C] shadow-[0_8px_24px_rgba(2,14,18,0.45)] backdrop-blur-xl transition hover:border-[#5FD3CC] hover:bg-[#092F38]/90"
+        className="ruby-glass-keycap inline-flex h-10 w-10 items-center justify-center rounded-[12px]"
       >
         {isPlaying ? (
           <span
             aria-hidden="true"
             className="flex h-3.5 items-end gap-[2.5px]"
           >
-            <span className="h-2.5 w-[2.5px] animate-[pulse_0.9s_ease-in-out_infinite] rounded-full bg-[#5FD3CC]" />
-            <span className="h-3.5 w-[2.5px] animate-[pulse_0.7s_ease-in-out_0.15s_infinite] rounded-full bg-[#F0D29C]" />
-            <span className="h-2 w-[2.5px] animate-[pulse_1.05s_ease-in-out_0.3s_infinite] rounded-full bg-[#5FD3CC]" />
+            <span className="h-2.5 w-[2.5px] animate-[pulse_0.9s_ease-in-out_infinite] rounded-full bg-white" />
+            <span className="h-3.5 w-[2.5px] animate-[pulse_0.7s_ease-in-out_0.15s_infinite] rounded-full bg-[#FFE3E8]" />
+            <span className="h-2 w-[2.5px] animate-[pulse_1.05s_ease-in-out_0.3s_infinite] rounded-full bg-white" />
           </span>
         ) : (
-          <VolumeX className="h-4 w-4 text-[#CBE6E4]" />
+          <VolumeX className="h-4 w-4 text-white" />
         )}
       </button>
     </div>
