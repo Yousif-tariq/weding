@@ -1,0 +1,34 @@
+{
+  "images": [
+    {
+      "category": "خلفية بداية الدعوة",
+      "file": "./خلفية بداية الدعوة.jpg",
+      "placement": "Opening screen backdrop & hero canopy"
+    },
+    {
+      "category": "صورة العروسين الفنية",
+      "file": "./1.png",
+      "placement": "Official royal invitation card crest"
+    },
+    {
+      "category": "استقبال الضيوف",
+      "file": "./استقبال الضيوف.jpg",
+      "placement": "Program chapter 1 — Guest reception"
+    },
+    {
+      "category": "وصول العريس والعروس",
+      "file": "./وصول العريس والعروس .jpg",
+      "placement": "Program chapter 2 — Couple grand entrance"
+    },
+    {
+      "category": "ليلة الجرتق",
+      "file": "./الجرتق.jpg",
+      "placement": "Dedicated Jirtiq heritage showcase"
+    }
+  ],
+  "fonts": [
+    { "provider": "Google Fonts", "name": "Alexandria" },
+    { "provider": "Google Fonts", "name": "Aref Ruqaa" },
+    { "provider": "Google Fonts", "name": "Amiri" }
+  ]
+}

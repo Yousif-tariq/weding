@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.vercel/
+
+# Local legacy scratch subfolder
+wallet-invitation/
+
+# Environment & Editor files
+.env
+.env.*
+.DS_Store
+Thumbs.db
+*.log
+*.tsbuildinfo

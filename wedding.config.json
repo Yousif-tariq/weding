@@ -1,0 +1,21 @@
+{
+  "groom": "مصطفى",
+  "bride": "إيثار",
+  "monogram": "م & إ",
+  "date": "2027-12-03",
+  "displayDate": "يوم الخميس الموافق ٣ ديسمبر ٢٠٢٧",
+  "shortDate": "٣ ديسمبر ٢٠٢٧",
+  "time": "٨:٠٠ مساءً",
+  "location": "قاعة ريماس",
+  "city": "الرياض — حي الشفاء",
+  "address": "الرياض، حي الشفاء — قاعة ريماس للاحتفالات",
+  "mapsUrl": "https://maps.app.goo.gl/PpPdYDgY5c9Vi3b18?g_st=iw",
+  "whatsappPhone": "+966530124082",
+  "whatsappDisplay": "+966 53 012 4082",
+  "language": "ar",
+  "direction": "rtl",
+  "theme": "velvet-crimson-rose-gold",
+  "countdown": true,
+  "animations": true,
+  "music": false
+}

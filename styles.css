@@ -1,0 +1,2549 @@
+/* =========================================================================
+   CELESTIAL PEARL, OPAL ICE & LIQUID CHAMPAGNE GOLD — FUTURISTIC LIGHT THEME
+   Airy, Luminous, Spatial-Glass Mobile-First Luxury Wedding Invitation
+   ========================================================================= */
+
+:root {
+  /* Futuristic Light Celestial Pearl & Opal Palette */
+  --rose-mist: #e4eef9;        /* Luminous Ice Mist */
+  --rose-soft: #f2f7fd;        /* Airy Cloud Pearl */
+  --rose-pure: #fbfdff;        /* Pure Celestial White */
+  --lavender-mist: #e4eef9;
+  --lavender-soft: #f2f7fd;
+  --lavender-pure: #fbfdff;
+
+  --violet-royal: #18243d;     /* Deep Celestial Sapphire Ink */
+  --violet-deep: #0e172a;      /* Midnight Crystal Navy */
+  --plum-ink: #273b63;         /* Refined Royal Slate */
+  --plum-text: #3d5175;        /* Crisp Frosted Slate Prose */
+  --plum-muted: #667ca3;       /* Airy Silver-Blue Accents */
+
+  --rose-dawn: #eef4fc;        /* Soft Sky-Opal Tint */
+  --blush-accent: #8cb4f5;     /* Luminous Aurora Sky Blue */
+  --crimson-accent: #5378cf;   /* Futuristic Periwinkle Sapphire */
+  --champagne-gold: #c9a24b;   /* Liquid Champagne Gold */
+  --champagne-light: #fcf7ea;  /* Warm Pearl Champagne */
+  --gold-glow: rgba(201, 162, 75, 0.34);
+  --opal-glow: rgba(140, 180, 245, 0.38);
+  --pearl: #ffffff;
+
+  /* Spatial VisionOS Frosted Crystal Glass */
+  --glass-bg: rgba(255, 255, 255, 0.78);
+  --glass-bg-strong: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.96);
+  --gold-hairline: rgba(201, 162, 75, 0.38);
+  --crimson-hairline: rgba(24, 36, 61, 0.1);
+  --glass-shadow: 0 22px 54px rgba(24, 36, 61, 0.08), 0 4px 18px rgba(83, 120, 207, 0.07);
+  --glass-inner: inset 0 1px 1.5px rgba(255, 255, 255, 0.98), inset 0 -1px 1px rgba(140, 180, 245, 0.22);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: var(--rose-mist);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  direction: rtl;
+  color: var(--violet-royal);
+  background: linear-gradient(180deg, var(--rose-pure) 0%, var(--rose-soft) 45%, var(--rose-mist) 100%);
+  font-family: "Alexandria", sans-serif;
+  line-height: 1.65;
+  min-height: 100dvh;
+}
+
+button, a {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: var(--plum-ink);
+  color: var(--pearl);
+}
+
+/* =========================================================================
+   SCROLL PROGRESS & AMBIENT LAYER
+   ========================================================================= */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0%;
+  height: 3px;
+  z-index: 90;
+  background: linear-gradient(90deg, var(--champagne-gold), var(--crimson-accent), var(--champagne-gold));
+  box-shadow: 0 0 10px var(--gold-glow);
+  pointer-events: none;
+  transition: width 0.08s linear;
+}
+
+#sparkles {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* =========================================================================
+   3D VANTA CLOUDS STAGE — BRIGHT CELESTIAL PEARL & OPAL SKY
+   ========================================================================= */
+
+.vanta-sky-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  background: linear-gradient(160deg, #eef5fd 0%, #dbe9fa 52%, #f7f2fc 100%);
+}
+
+#vantaBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 1.3s var(--ease), filter 1.3s var(--ease);
+}
+
+.intro-photo-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 1.15s var(--ease), transform 1.2s var(--ease);
+}
+
+#introHeroPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 54%;
+  image-rendering: -webkit-optimize-contrast;
+  filter: contrast(1.09) saturate(1.14) brightness(1.04);
+  transform: translate3d(var(--bg-x, 0px), var(--bg-y, 0px), 0) scale(1.03);
+  backface-visibility: hidden;
+  will-change: transform, filter;
+  animation: heroKenBurns 18s ease-in-out infinite alternate;
+}
+
+@keyframes heroKenBurns {
+  0% {
+    transform: translate3d(var(--bg-x, 0px), var(--bg-y, 0px), 0) scale(1.01);
+  }
+  100% {
+    transform: translate3d(var(--bg-x, 0px), var(--bg-y, 0px), 0) scale(1.08);
+  }
+}
+
+/* Soft Celestial Spotlight & Edge Polish over 249.jpg */
+.intro-photo-aura {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.06) 0%, rgba(140, 180, 245, 0.14) 55%, rgba(14, 23, 42, 0.42) 100%),
+    linear-gradient(180deg, rgba(14, 23, 42, 0.22) 0%, transparent 32%, transparent 66%, rgba(14, 23, 42, 0.45) 100%);
+}
+
+body.invitation-opened .intro-photo-layer {
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+body.invitation-opened #vantaBg {
+  opacity: 0.42;
+  filter: blur(2px) saturate(0.88);
+}
+
+.vanta-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 15%, rgba(140, 180, 245, 0.2) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 85%, rgba(201, 162, 75, 0.14) 0%, transparent 54%);
+  transition: background 1.3s var(--ease);
+}
+
+body.invitation-opened .vanta-atmosphere {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(251, 253, 255, 0.85) 0%, rgba(242, 247, 253, 0.72) 55%, rgba(228, 238, 249, 0.78) 100%);
+}
+
+/* =========================================================================
+   OPENING CURTAIN — FUTURISTIC HOLOGRAPHIC CRYSTAL PORTAL CARD
+   ========================================================================= */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: transparent;
+  transition: transform 1.2s var(--ease), opacity 1s ease, filter 1.1s ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+.intro.opening-sequence .futuristic-portal-card {
+  transform: scale(1.14) translateZ(60px);
+  opacity: 0;
+  filter: brightness(1.35) blur(10px);
+  transition: transform 0.95s var(--ease), opacity 0.8s ease, filter 0.85s ease;
+}
+
+.intro.opening-sequence .portal-orbit-system {
+  transform: scale(1.85) rotate(40deg);
+  opacity: 0;
+  transition: transform 1.05s var(--ease), opacity 0.85s ease;
+}
+
+.intro.opening-sequence .portal-seal-btn {
+  transform: scale(1.45);
+  opacity: 0;
+  filter: brightness(1.8) blur(6px);
+}
+
+.intro.opened {
+  transform: scale(1.16);
+  opacity: 0;
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+/* Futuristic Expanding Shockwave Rings */
+.portal-shockwaves {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.shockwave-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 28px rgba(140, 180, 245, 0.85), inset 0 0 18px rgba(255, 255, 255, 0.8);
+}
+
+.intro.opening-sequence .sw-1 {
+  animation: shockwaveExpand 1.05s var(--ease) forwards;
+}
+
+.intro.opening-sequence .sw-2 {
+  border-color: rgba(140, 180, 245, 0.95);
+  box-shadow: 0 0 36px rgba(83, 120, 207, 0.65), inset 0 0 20px rgba(255, 255, 255, 0.8);
+  animation: shockwaveExpand 1.15s var(--ease) 0.12s forwards;
+}
+
+.intro.opening-sequence .sw-3 {
+  border-color: rgba(201, 162, 75, 0.9);
+  box-shadow: 0 0 42px rgba(201, 162, 75, 0.65);
+  animation: shockwaveExpand 1.25s var(--ease) 0.24s forwards;
+}
+
+@keyframes shockwaveExpand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0.95;
+    border-width: 3px;
+  }
+  60% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(14);
+    opacity: 0;
+    border-width: 0.5px;
+  }
+}
+
+/* Futuristic Prismatic Light Bloom Flash */
+.portal-warp-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(228, 238, 249, 0.85) 34%,
+    rgba(140, 180, 245, 0.45) 68%,
+    transparent 100%
+  );
+}
+
+.intro.opening-sequence .portal-warp-flash {
+  animation: warpFlashBloom 1.15s var(--ease) 0.18s forwards;
+}
+
+@keyframes warpFlashBloom {
+  0% { opacity: 0; transform: scale(0.4); }
+  42% { opacity: 0.92; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+#introMagicCanvas,
+#introBurstCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#introMagicCanvas { z-index: 2; }
+#introBurstCanvas { z-index: 6; }
+
+.magical-shimmer-sweep {
+  position: absolute;
+  inset: -40%;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 43%, rgba(212, 224, 235, 0.18) 50%, transparent 57%);
+  animation: shimmerSweep 8s ease-in-out infinite;
+}
+
+@keyframes shimmerSweep {
+  0% { transform: translateX(65%) rotate(6deg); opacity: 0; }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateX(-65%) rotate(6deg); opacity: 0; }
+}
+
+.intro-stage {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: 420px;
+  height: 100dvh;
+  padding: max(22px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1100px;
+}
+
+/* Floating Orbital Rings Behind the Futuristic Card */
+.portal-orbit-system {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.portal-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 224, 235, 0.38);
+}
+
+.portal-ring--outer {
+  width: 390px;
+  height: 390px;
+  border-style: dashed;
+  border-color: rgba(212, 224, 235, 0.24);
+  animation: orbitSpin 30s linear infinite;
+}
+
+.portal-ring--inner {
+  width: 310px;
+  height: 310px;
+  border-color: rgba(173, 193, 222, 0.24);
+  box-shadow: 0 0 44px rgba(83, 120, 207, 0.2);
+  animation: orbitSpinReverse 22s linear infinite;
+}
+
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbitSpinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* Futuristic Spatial-Glass White-Pearl Portal Card */
+.futuristic-portal-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 2px;
+  border-radius: 34px;
+  overflow: hidden;
+  pointer-events: auto;
+  box-shadow:
+    0 28px 74px rgba(24, 36, 61, 0.14),
+    0 0 42px rgba(140, 180, 245, 0.34),
+    0 0 18px rgba(255, 255, 255, 0.85);
+  animation: portalLevitate 5.8s ease-in-out infinite alternate;
+  transition: transform 0.7s var(--ease), filter 0.7s var(--ease);
+}
+
+@keyframes portalLevitate {
+  0% { transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(0px); }
+  100% { transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-9px); }
+}
+
+/* Rotating Luminous Holographic Opal & Gold Border Beam */
+.portal-border-beam {
+  position: absolute;
+  inset: -60%;
+  opacity: 0.92;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    #ffffff 45deg,
+    #8cb4f5 110deg,
+    transparent 165deg,
+    #c9a24b 225deg,
+    #d8c2f8 290deg,
+    #ffffff 335deg,
+    transparent 360deg
+  );
+  animation: beamRotate 6.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes beamRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.portal-inner-surface {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 26px 22px 24px;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.92) 0%, transparent 56%),
+    radial-gradient(circle at 100% 100%, rgba(216, 194, 248, 0.28) 0%, transparent 56%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.76) 0%, rgba(242, 247, 253, 0.68) 55%, rgba(255, 255, 255, 0.82) 100%);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  box-shadow:
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.98),
+    inset 0 -1px 1.5px rgba(140, 180, 245, 0.32);
+  text-align: center;
+  color: var(--violet-royal);
+  text-rendering: optimizeLegibility;
+}
+
+.portal-top-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(140, 180, 245, 0.45);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--plum-ink);
+  letter-spacing: 0.03em;
+}
+
+.portal-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--crimson-accent);
+  box-shadow: 0 0 10px var(--blush-accent), 0 0 16px rgba(83, 120, 207, 0.7);
+  animation: dotBlink 1.8s ease-in-out infinite;
+}
+
+@keyframes dotBlink {
+  0%, 100% { transform: scale(0.85); opacity: 0.75; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+.portal-year {
+  color: var(--champagne-gold);
+  padding-right: 6px;
+  border-right: 1px solid rgba(24, 36, 61, 0.16);
+}
+
+.vip-guest-badge {
+  margin: 10px auto 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(252, 247, 234, 0.9), rgba(238, 244, 252, 0.9));
+  border: 1px solid var(--gold-hairline);
+  color: var(--violet-royal);
+  font-size: 12.5px;
+}
+
+.vip-guest-badge.hidden {
+  display: none;
+}
+
+.vip-guest-badge strong {
+  color: var(--crimson-accent);
+  font-weight: 700;
+}
+
+.portal-kicker {
+  margin: 14px 0 4px;
+  font-family: "Amiri", serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--plum-muted);
+}
+
+.portal-names {
+  margin: 2px 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-family: "Aref Ruqaa", serif;
+  font-size: clamp(2.65rem, 12vw, 3.55rem);
+  font-weight: 700;
+  line-height: 1.22;
+}
+
+.portal-name {
+  background: linear-gradient(160deg, #0e172a 10%, #273b63 55%, #5378cf 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 14px rgba(140, 180, 245, 0.45));
+}
+
+.portal-amp {
+  font-family: "Amiri", serif;
+  font-style: italic;
+  font-size: 0.72em;
+  color: var(--champagne-gold);
+  text-shadow: 0 2px 14px var(--gold-glow);
+}
+
+.portal-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 4px auto 10px;
+}
+
+.portal-divider span {
+  height: 1px;
+  width: 58px;
+  background: linear-gradient(90deg, transparent, var(--champagne-gold), transparent);
+}
+
+.portal-divider i {
+  font-style: normal;
+  color: var(--champagne-gold);
+  font-size: 13px;
+}
+
+.portal-poetic {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--plum-text);
+}
+
+/* Futuristic Gyroscope Portal Seal (Light Crystal & Sapphire-Gold) */
+.portal-seal-stage {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.portal-seal-btn {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: transform 0.6s var(--ease-spring), opacity 0.6s ease, filter 0.6s ease;
+}
+
+.portal-seal-btn:active {
+  transform: scale(0.92);
+}
+
+.gyro-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.gyro-ring--a {
+  inset: -8px;
+  border: 1.5px dashed rgba(201, 162, 75, 0.72);
+  animation: orbitSpin 12s linear infinite;
+}
+
+.gyro-ring--b {
+  inset: -16px;
+  border: 1.5px solid transparent;
+  border-top-color: #6384d6;
+  border-bottom-color: #c9a24b;
+  animation: orbitSpinReverse 7s linear infinite;
+}
+
+.gyro-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(140, 180, 245, 0.5) 0%, transparent 72%);
+  animation: sealPulse 2.4s var(--ease) infinite;
+}
+
+@keyframes sealPulse {
+  0% { transform: scale(0.92); opacity: 0.9; }
+  100% { transform: scale(1.38); opacity: 0; }
+}
+
+.portal-seal-core {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 22%, #ffffff 0%, #eaf2fc 48%, #d4e4f7 100%);
+  border: 2px solid var(--champagne-gold);
+  box-shadow:
+    0 14px 34px rgba(83, 120, 207, 0.24),
+    0 0 22px rgba(255, 255, 255, 0.9),
+    inset 0 2px 10px rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--violet-royal);
+}
+
+.seal-star {
+  font-size: 10px;
+  color: var(--champagne-gold);
+  line-height: 1;
+}
+
+.seal-monogram {
+  font-family: "Aref Ruqaa", serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--violet-royal);
+  text-shadow: 0 2px 8px rgba(140, 180, 245, 0.45);
+}
+
+.seal-hint {
+  font-size: 9px;
+  color: var(--plum-muted);
+  font-weight: 600;
+}
+
+/* Liquid-Glass Futuristic Open Button */
+.portal-open-btn {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #18243d 0%, #2d4678 52%, #5378cf 100%);
+  color: #ffffff;
+  font-size: 15.5px;
+  font-weight: 700;
+  border: 1px solid rgba(201, 162, 75, 0.65);
+  box-shadow:
+    0 14px 32px rgba(24, 36, 61, 0.22),
+    0 0 20px rgba(140, 180, 245, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease);
+}
+
+.portal-open-btn:active {
+  transform: scale(0.96);
+}
+
+.btn-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.45) 50%, transparent 75%);
+  transform: translateX(120%);
+  animation: btnSheen 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes btnSheen {
+  0%, 35% { transform: translateX(120%); }
+  85%, 100% { transform: translateX(-120%); }
+}
+
+.btn-ornament {
+  color: var(--champagne-light);
+  font-size: 12px;
+}
+
+.portal-meta-line {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--plum-muted);
+  font-weight: 500;
+}
+
+.meta-dot {
+  color: var(--champagne-gold);
+}
+
+/* =========================================================================
+   MOBILE-FIRST SHELL & FLOATING GLASS NAVIGATION
+   ========================================================================= */
+
+.mobile-shell {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: linear-gradient(180deg, rgba(251, 253, 255, 0.44) 0%, rgba(242, 247, 253, 0.38) 50%, rgba(228, 238, 249, 0.36) 100%);
+  box-shadow: 0 0 80px rgba(24, 36, 61, 0.07);
+  overflow-x: clip;
+  opacity: 0;
+  transform: scale(0.94);
+  filter: blur(8px);
+  transition: opacity 0.95s var(--ease), transform 1.05s var(--ease), filter 0.95s var(--ease);
+}
+
+body.invitation-opened .mobile-shell {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.top-glass-nav {
+  position: sticky;
+  top: max(10px, env(safe-area-inset-top));
+  z-index: 60;
+  margin: 0 12px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 24px rgba(24, 36, 61, 0.08), 0 0 0 1px rgba(201, 162, 75, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+
+body.scroll-unlocked .top-glass-nav {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Completely hide all content below the solo poetic card until the user starts scrolling */
+.scroll-locked-content {
+  display: none;
+  opacity: 0;
+  transform: translateY(34px);
+}
+
+body.scroll-unlocked .scroll-locked-content {
+  display: block;
+  animation: contentRevealRise 0.9s var(--ease) forwards;
+}
+
+@keyframes contentRevealRise {
+  0% {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Solo Full-Screen Transparent Crystal-Glass Arch Stage */
+.poetic-solo-section {
+  min-height: 100dvh;
+  padding: 28px 16px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.celestial-top-halo {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(140, 180, 245, 0.28) 50%, transparent 74%);
+  filter: blur(26px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Soft Luminous Prism Orbs visible THROUGH the Transparent Glass Card */
+.glass-prism-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(36px);
+  opacity: 0.72;
+}
+
+.glass-prism-orb.orb-a {
+  width: 210px;
+  height: 210px;
+  top: 16%;
+  right: -40px;
+  background: radial-gradient(circle, rgba(140, 180, 245, 0.72) 0%, rgba(83, 120, 207, 0.18) 60%, transparent 75%);
+  animation: orbDriftA 11s ease-in-out infinite alternate;
+}
+
+.glass-prism-orb.orb-b {
+  width: 220px;
+  height: 220px;
+  bottom: 14%;
+  left: -50px;
+  background: radial-gradient(circle, rgba(230, 200, 122, 0.62) 0%, rgba(201, 162, 75, 0.16) 60%, transparent 75%);
+  animation: orbDriftB 13s ease-in-out infinite alternate;
+}
+
+.glass-prism-orb.orb-c {
+  width: 170px;
+  height: 170px;
+  top: 48%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(216, 194, 248, 0.58) 0%, transparent 72%);
+  animation: orbDriftA 9s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes orbDriftA {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-18px, 22px, 0) scale(1.1); }
+}
+
+@keyframes orbDriftB {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(20px, -18px, 0) scale(1.08); }
+}
+
+/* Transparent Sculpted Crystal-Glass Cathedral Arch Card */
+.poetic-solo-card {
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+  text-align: center;
+  padding: 56px 22px 34px;
+  border-radius: 160px 160px 34px 34px;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.16) 46%, rgba(238, 244, 252, 0.34) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px) saturate(165%);
+  -webkit-backdrop-filter: blur(14px) saturate(165%);
+  box-shadow:
+    0 28px 68px rgba(24, 36, 61, 0.1),
+    0 0 0 1px rgba(201, 162, 75, 0.3),
+    inset 0 2px 6px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 10px rgba(140, 180, 245, 0.22);
+}
+
+/* Curved Inner Gold-Glass Arch Filigree */
+.poetic-solo-card::after {
+  inset: 11px;
+  border-radius: 150px 150px 26px 26px;
+  border: 1px solid rgba(201, 162, 75, 0.34);
+}
+
+/* Subtle Diagonal Glass Specular Reflection */
+.poetic-solo-card::before {
+  content: "";
+  position: absolute;
+  top: -15%;
+  left: -25%;
+  width: 75%;
+  height: 60%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.08) 55%, transparent 100%);
+  transform: rotate(-16deg);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.poetic-solo-card .card-corner.corner-tr,
+.poetic-solo-card .card-corner.corner-tl {
+  display: none;
+}
+
+.solo-scroll-hint {
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(201, 162, 75, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--violet-royal);
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: 0 10px 26px rgba(24, 36, 61, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.poetic-solo-card.stanza-done .solo-scroll-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.solo-scroll-hint svg {
+  color: var(--champagne-gold);
+  animation: bounceDown 1.7s ease-in-out infinite;
+}
+
+.nav-brand {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--violet-royal), var(--plum-ink));
+  border: 1px solid var(--champagne-gold);
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(24, 36, 61, 0.25);
+}
+
+.nav-monogram {
+  font-family: "Aref Ruqaa", serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--champagne-light);
+  line-height: 1;
+}
+
+.nav-pills {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-pill {
+  flex-shrink: 0;
+  text-decoration: none;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--plum-text);
+  padding: 6px 11px;
+  border-radius: 999px;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.nav-pill.active,
+.nav-pill:hover {
+  background: var(--violet-royal);
+  color: var(--pearl);
+}
+
+/* =========================================================================
+   SHARED SECTION & COUTURE CARD PRIMITIVES
+   ========================================================================= */
+
+.invitation-flow {
+  padding-bottom: 34px;
+}
+
+.section-block {
+  position: relative;
+  padding: 26px 16px;
+  scroll-margin-top: 72px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--plum-ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--gold-hairline);
+  padding: 5px 15px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 14px rgba(24, 36, 61, 0.05);
+}
+
+.section-eyebrow svg {
+  color: var(--champagne-gold);
+  flex-shrink: 0;
+}
+
+.ornament-svg {
+  color: var(--champagne-gold);
+  flex-shrink: 0;
+}
+
+.section-title {
+  margin: 0 0 6px;
+  font-family: "Amiri", serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+  line-height: 1.25;
+}
+
+.section-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--plum-text);
+}
+
+/* =========================================================================
+   ULTRA-FAST COUTURE PORCELAIN & CRYSTAL CARDS (60-120FPS SCROLL OPTIMIZED)
+   Clean Alabaster Surfaces, Double-Bevel Gold Frames & Zero Scroll Lag
+   ========================================================================= */
+
+.royal-card {
+  position: relative;
+  border-radius: 30px;
+  padding: 34px 22px;
+  background:
+    radial-gradient(ellipse at 50% -10%, #ffffff 0%, rgba(236, 244, 254, 0.55) 45%, transparent 74%),
+    linear-gradient(168deg, #ffffff 0%, #f6faff 54%, #ffffff 100%);
+  border: 1px solid rgba(255, 255, 255, 1);
+  box-shadow:
+    0 20px 46px rgba(24, 36, 61, 0.075),
+    0 4px 14px rgba(83, 120, 207, 0.055),
+    0 0 0 1px rgba(201, 162, 75, 0.24),
+    inset 0 2px 3px rgba(255, 255, 255, 1);
+  overflow: hidden;
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+
+/* Couture Double-Bevel Architectural Inner Frame */
+.royal-card::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 22px;
+  border: 1px solid rgba(201, 162, 75, 0.22);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.royal-card > *,
+.station-card > *,
+.finale-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Sculpted Fine Gold Architectural Corner Filigrees */
+.card-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: rgba(201, 162, 75, 0.58);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.corner-tr { top: 14px; right: 14px; border-width: 1.5px 1.5px 0 0; border-top-right-radius: 10px; }
+.corner-tl { top: 14px; left: 14px; border-width: 1.5px 0 0 1.5px; border-top-left-radius: 10px; }
+.corner-br { bottom: 14px; right: 14px; border-width: 0 1.5px 1.5px 0; border-bottom-right-radius: 10px; }
+.corner-bl { bottom: 14px; left: 14px; border-width: 0 0 1.5px 1.5px; border-bottom-left-radius: 10px; }
+
+.card-ornament,
+.stanza-divider,
+.name-flourish,
+.card-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px auto 16px;
+}
+
+.card-ornament span,
+.stanza-divider span,
+.name-flourish span,
+.card-divider span {
+  height: 1px;
+  width: 52px;
+  background: linear-gradient(90deg, transparent, var(--champagne-gold), transparent);
+}
+
+.card-ornament i,
+.stanza-divider i,
+.name-flourish i,
+.card-divider i {
+  font-style: normal;
+  color: var(--champagne-gold);
+  font-size: 13px;
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px) scale(0.985);
+  transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* =========================================================================
+   SECTION 1: POETIC ROYAL INVITATION CARD
+   ========================================================================= */
+
+.hero-section {
+  padding-top: 10px;
+}
+
+.hero-canopy {
+  position: relative;
+  margin: 0 -16px -68px;
+  height: 280px;
+  overflow: hidden;
+}
+
+.hero-canopy-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0.28;
+  filter: saturate(0.22) brightness(1.16) contrast(0.95);
+  will-change: transform;
+}
+
+.hero-canopy-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(242, 247, 253, 0.35) 0%, rgba(251, 253, 255, 0.45) 44%, var(--rose-pure) 96%);
+}
+
+.hero-card {
+  text-align: center;
+  padding: 26px 18px 28px;
+}
+
+/* Poetic Stanza: Futuristic Luminous Pen Writing + Liquid Water Flow */
+/* Poetic Stanza: Pure Transparent Glass Surface so Liquid Calligraphy Floats Directly on Crystal */
+.poetic-stanza {
+  position: relative;
+  padding: 12px 6px 8px;
+  border-radius: 20px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 10px;
+  overflow: visible;
+}
+
+.liquid-line-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.liquid-line-wrap:last-child {
+  margin-bottom: 0;
+}
+
+.liquid-line-stage {
+  position: relative;
+  display: inline-block;
+  padding: 2px 6px;
+}
+
+.stanza-line {
+  margin: 0;
+  font-family: "Amiri", serif;
+  font-size: 1.32rem;
+  font-weight: 700;
+  line-height: 1.9;
+  white-space: nowrap;
+  background: linear-gradient(
+    90deg,
+    var(--violet-deep) 0%,
+    var(--violet-royal) 35%,
+    var(--crimson-accent) 50%,
+    var(--champagne-gold) 62%,
+    var(--violet-deep) 100%
+  );
+  background-size: 240% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Start hidden from left edge so it writes smoothly Right -> Left */
+  clip-path: inset(0 0 0 100%);
+  opacity: 0;
+  will-change: clip-path, filter, background-position;
+}
+
+/* Writing State: Pen glides Right -> Left revealing connected Arabic ink */
+.liquid-line-wrap.is-writing .stanza-line {
+  opacity: 1;
+  animation: penWriteRTL 1.25s cubic-bezier(0.22, 0.85, 0.36, 1) forwards;
+}
+
+@keyframes penWriteRTL {
+  0% {
+    clip-path: inset(0 0 0 100%);
+    background-position: 100% 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0%);
+    background-position: 45% 0;
+  }
+}
+
+/* Luminous Futuristic Pen Nib gliding across the line */
+.pen-nib-spark {
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  transform: translate(50%, -50%) scale(0);
+  font-size: 15px;
+  color: var(--champagne-gold);
+  text-shadow:
+    0 0 10px rgba(201, 162, 75, 0.95),
+    0 0 20px rgba(83, 120, 207, 0.85),
+    0 0 4px #ffffff;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 4;
+}
+
+.liquid-line-wrap.is-writing .pen-nib-spark {
+  animation: penNibGlide 1.25s cubic-bezier(0.22, 0.85, 0.36, 1) forwards;
+}
+
+@keyframes penNibGlide {
+  0% {
+    right: 0%;
+    opacity: 0;
+    transform: translate(50%, -50%) scale(0.4) rotate(0deg);
+  }
+  8% {
+    opacity: 1;
+    transform: translate(50%, -50%) scale(1.25) rotate(25deg);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(50%, -50%) scale(1.1) rotate(160deg);
+  }
+  100% {
+    right: 100%;
+    opacity: 0;
+    transform: translate(50%, -50%) scale(0.3) rotate(210deg);
+  }
+}
+
+/* Liquid Water Flow State: Apply SVG ripple filter to wrapper so text never flickers in Chrome/Safari */
+.liquid-line-wrap.is-flowing .liquid-line-stage {
+  filter: url(#liquidInkFilter) drop-shadow(0 3px 10px rgba(140, 180, 245, 0.4));
+}
+
+.liquid-line-wrap.is-flowing .stanza-line {
+  opacity: 1;
+  clip-path: inset(0 0 0 0%);
+  animation: liquidInkShimmer 1.35s var(--ease) forwards;
+}
+
+.liquid-line-wrap.is-settled .stanza-line {
+  opacity: 1;
+  clip-path: inset(0 0 0 0%);
+  background-position: 10% 0;
+  filter: drop-shadow(0 2px 6px rgba(201, 162, 75, 0.18));
+  transition: filter 0.6s ease;
+}
+
+@keyframes liquidInkShimmer {
+  0% {
+    background-position: 50% 0;
+    transform: translateY(0) scaleY(1);
+  }
+  45% {
+    background-position: 0% 0;
+    transform: translateY(2px) scaleY(1.04);
+  }
+  100% {
+    background-position: 10% 0;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* Liquid Droplet / Silk Water Stream cascading down to the next line */
+.liquid-drop-stream {
+  display: block;
+  width: 2.5px;
+  height: 16px;
+  margin: -2px auto 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(201, 162, 75, 0.1) 0%, var(--champagne-gold) 55%, var(--crimson-accent) 100%);
+  box-shadow: 0 0 10px rgba(201, 162, 75, 0.8);
+  transform-origin: top center;
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+.liquid-line-wrap.is-flowing .liquid-drop-stream {
+  animation: liquidDropCascade 0.72s var(--ease) forwards;
+}
+
+@keyframes liquidDropCascade {
+  0% {
+    transform: scaleY(0) translateY(-4px);
+    opacity: 0;
+  }
+  35% {
+    transform: scaleY(1.1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.15) translateY(14px);
+    opacity: 0;
+  }
+}
+
+.welcome-kicker {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--plum-muted);
+}
+
+/* Elongated Calligraphic "يـــــتـــــشـــــرّفـــــون" */
+.kashida-word {
+  margin: 0 0 16px;
+  font-family: "Amiri", serif;
+  font-size: clamp(1.95rem, 8.2vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.4;
+  background: linear-gradient(110deg, var(--violet-royal) 15%, var(--crimson-accent) 45%, var(--champagne-gold) 55%, var(--violet-royal) 85%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: goldTextFlow 6s ease-in-out infinite;
+  letter-spacing: 0.01em;
+}
+
+@keyframes goldTextFlow {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+/* Honored Families Alabaster-Crystal Plaque */
+.families-crest {
+  padding: 18px 14px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(238, 244, 252, 0.72));
+  border: 1px solid rgba(201, 162, 75, 0.36);
+  box-shadow:
+    0 12px 28px rgba(24, 36, 61, 0.055),
+    inset 0 1px 1px rgba(255, 255, 255, 0.98);
+  margin-bottom: 18px;
+}
+
+.family-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.family-name {
+  font-family: "Amiri", serif;
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+}
+
+.family-star {
+  color: var(--champagne-gold);
+  font-size: 11px;
+}
+
+.family-amp {
+  display: inline-block;
+  margin: 4px 0;
+  font-family: "Amiri", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--champagne-gold);
+}
+
+.invite-action-line {
+  margin: 0 0 18px;
+  font-family: "Amiri", serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--plum-ink);
+}
+
+/* Sculpted Cathedral-Arch Crystal Niche (1.png) */
+.couple-art-frame {
+  position: relative;
+  width: 210px;
+  height: 232px;
+  margin: 0 auto 26px;
+  border-radius: 112px 112px 28px 28px;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.98) 0%, rgba(238, 244, 252, 0.88) 65%, rgba(220, 232, 248, 0.75) 100%);
+  border: 1.5px solid rgba(201, 162, 75, 0.45);
+  box-shadow:
+    0 20px 44px rgba(24, 36, 61, 0.1),
+    0 0 32px rgba(140, 180, 245, 0.25),
+    inset 0 2px 12px rgba(255, 255, 255, 1);
+  padding: 14px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+.couple-art-frame:active {
+  transform: scale(0.97);
+}
+
+.art-arch-halo {
+  position: absolute;
+  inset: 6px;
+  border-radius: 102px 102px 18px 18px;
+  border: 1px dashed rgba(201, 162, 75, 0.48);
+  pointer-events: none;
+}
+
+.couple-art-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(24, 36, 61, 0.14));
+  animation: gentleFloat 6s ease-in-out infinite alternate;
+}
+
+@keyframes gentleFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+.art-monogram-badge {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--violet-royal), var(--plum-ink));
+  color: var(--champagne-light);
+  border: 1px solid var(--champagne-gold);
+  font-family: "Aref Ruqaa", serif;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(14, 23, 42, 0.25);
+  white-space: nowrap;
+}
+
+/* Grand Couple Lockup (الوسيم مصطفى & الحسناء إيثار) */
+.royal-couple-showcase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 8px 0 6px;
+}
+
+.couple-person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.person-epithet {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--plum-muted);
+  background: var(--rose-dawn);
+  border: 1px solid rgba(201, 162, 75, 0.35);
+  padding: 2px 11px;
+  border-radius: 999px;
+}
+
+.royal-name {
+  font-family: "Aref Ruqaa", serif;
+  font-size: clamp(2.4rem, 11vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--violet-royal);
+  text-shadow: 0 3px 16px rgba(201, 162, 75, 0.34);
+}
+
+.royal-ampersand {
+  font-family: "Amiri", serif;
+  font-style: italic;
+  font-size: 2.1rem;
+  color: var(--champagne-gold);
+  text-shadow: 0 2px 12px var(--gold-glow);
+  margin-top: 16px;
+}
+
+/* Architectural Champagne-Silk Proclamation Tablet */
+.proclamation-box {
+  padding: 18px 16px;
+  border-radius: 22px;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(252, 247, 234, 0.72));
+  border: 1px solid rgba(201, 162, 75, 0.34);
+  box-shadow: 0 10px 24px rgba(24, 36, 61, 0.05), inset 0 1px 1px rgba(255, 255, 255, 1);
+  margin-bottom: 18px;
+}
+
+.proclamation-venue {
+  margin: 0 0 6px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--violet-royal);
+}
+
+.proclamation-inshallah {
+  margin: 0 0 4px;
+  font-family: "Amiri", serif;
+  font-size: 15px;
+  color: var(--plum-muted);
+}
+
+.proclamation-date {
+  margin: 0;
+  font-family: "Amiri", serif;
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: var(--plum-ink);
+}
+
+.honor-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--violet-royal), var(--plum-ink));
+  border: 1px solid var(--champagne-gold);
+  color: var(--champagne-light);
+  font-family: "Amiri", serif;
+  font-size: 1.15rem;
+  box-shadow: 0 10px 24px rgba(24, 36, 61, 0.22);
+  margin-bottom: 18px;
+}
+
+.honor-ribbon span {
+  color: var(--champagne-gold);
+  font-size: 12px;
+}
+
+.scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--plum-ink);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--rose-dawn);
+  border: 1px solid var(--gold-hairline);
+}
+
+.scroll-cue svg {
+  color: var(--champagne-gold);
+  animation: bounceDown 1.8s ease-in-out infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+/* =========================================================================
+   SECTION 2: DATE & COUNTDOWN
+   ========================================================================= */
+
+.date-card {
+  text-align: center;
+  padding: 26px 18px;
+}
+
+.date-glow-ring {
+  position: absolute;
+  top: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 162, 75, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.date-weekday {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--plum-muted);
+  margin-bottom: 4px;
+}
+
+.date-gregorian {
+  display: block;
+  font-family: "Amiri", serif;
+  font-size: 1.95rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+  line-height: 1.3;
+}
+
+.date-hijri {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--plum-text);
+}
+
+.date-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0 18px;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--rose-pure);
+  border: 1px solid var(--crimson-hairline);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--violet-royal);
+}
+
+.meta-chip svg {
+  color: var(--champagne-gold);
+}
+
+/* Royal Mini Calendar (December 2027) */
+.royal-mini-calendar {
+  margin: 4px 0 20px;
+  padding: 14px 12px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 253, 253, 0.92), rgba(238, 244, 252, 0.6));
+  border: 1px solid rgba(201, 162, 75, 0.34);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(24, 36, 61, 0.1);
+  font-family: "Amiri", serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+}
+
+.cal-header i {
+  font-style: normal;
+  color: var(--champagne-gold);
+}
+
+.cal-weekdays,
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+}
+
+.cal-weekdays span {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--plum-muted);
+  padding-bottom: 6px;
+}
+
+.cal-days span {
+  height: 30px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--plum-text);
+  border-radius: 50%;
+}
+
+.cal-days .cal-wedding-day {
+  position: relative;
+  background: linear-gradient(135deg, var(--violet-royal), var(--crimson-accent));
+  color: var(--champagne-light);
+  border: 1.5px solid var(--champagne-gold);
+  box-shadow: 0 0 16px rgba(83, 120, 207, 0.42);
+  font-weight: 700;
+  animation: heartPulse 2.1s ease-in-out infinite;
+}
+
+.cal-days .cal-wedding-day b {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cal-days .cal-wedding-day i {
+  position: absolute;
+  top: -6px;
+  left: -4px;
+  font-style: normal;
+  font-size: 10px;
+  color: var(--champagne-gold);
+  text-shadow: 0 0 6px rgba(14, 23, 42, 0.6);
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.countdown-tile {
+  padding: 15px 6px;
+  border-radius: 20px;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.96) 0%, rgba(238, 244, 252, 0.82) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 12px 26px rgba(24, 36, 61, 0.07),
+    0 0 0 1px rgba(201, 162, 75, 0.24),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 1);
+  text-align: center;
+}
+
+.countdown-tile strong {
+  display: block;
+  font-family: "Amiri", serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--violet-royal);
+}
+
+.countdown-tile span {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--plum-muted);
+  font-weight: 500;
+}
+
+.gold-outline-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--pearl), var(--champagne-light));
+  border: 1px solid var(--gold-hairline);
+  color: var(--violet-royal);
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(24, 36, 61, 0.08);
+  transition: transform 0.25s var(--ease);
+}
+
+.gold-outline-btn:active {
+  transform: scale(0.97);
+}
+
+/* =========================================================================
+   SECTION 3: ANIMATED JOURNEY TIMELINE (محطات الفرح لحظة بلحظة)
+   Scroll-driven golden path + moving luminous traveler orb!
+   ========================================================================= */
+
+.journey-track-wrap {
+  position: relative;
+  padding-right: 40px; /* Room for the RTL golden rail & moving traveler */
+  padding-top: 6px;
+  padding-bottom: 10px;
+}
+
+.journey-rail {
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  right: 16px;
+  width: 4px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.journey-rail-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(24, 36, 61, 0.18) 0px,
+    rgba(24, 36, 61, 0.18) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.journey-rail-fill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 0%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--champagne-gold) 0%, var(--crimson-accent) 55%, var(--champagne-gold) 100%);
+  box-shadow: 0 0 14px var(--gold-glow);
+  transition: height 0.12s linear;
+}
+
+/* Moving Luminous Traveler gliding along the path */
+.journey-traveler {
+  position: absolute;
+  top: 0%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+  transition: top 0.12s linear;
+}
+
+.traveler-aura {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 162, 75, 0.65) 0%, rgba(83, 120, 207, 0.22) 55%, transparent 75%);
+  animation: travelerPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes travelerPulse {
+  0%, 100% { transform: scale(0.88); opacity: 0.8; }
+  50% { transform: scale(1.22); opacity: 1; }
+}
+
+.traveler-core {
+  position: relative;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--violet-royal), var(--crimson-accent));
+  border: 1.5px solid var(--champagne-gold);
+  color: var(--champagne-light);
+  font-size: 12px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 16px rgba(201, 162, 75, 0.85);
+}
+
+.journey-station {
+  position: relative;
+  margin-bottom: 16px;
+  perspective: 900px;
+}
+
+.station-node {
+  position: absolute;
+  top: 16px;
+  right: -38px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--rose-pure);
+  border: 1.5px solid rgba(24, 36, 61, 0.25);
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  transition: all 0.45s var(--ease-spring);
+}
+
+.node-num {
+  font-family: "Amiri", serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--plum-muted);
+  transition: color 0.35s ease;
+}
+
+.node-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--champagne-gold);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.45s var(--ease);
+}
+
+/* Active / Reached Station State */
+.journey-station.is-reached .station-node {
+  background: linear-gradient(135deg, var(--violet-royal), var(--plum-ink));
+  border-color: var(--champagne-gold);
+  box-shadow: 0 0 18px var(--gold-glow);
+  transform: scale(1.08);
+}
+
+.journey-station.is-reached .node-num {
+  color: var(--champagne-light);
+}
+
+.journey-station.is-reached .node-ring {
+  opacity: 0.9;
+  transform: scale(1.15);
+}
+
+/* Gallery-Grade Sculpted Porcelain Frame for Journey Stations (Zero Lag) */
+.station-card {
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  padding: 10px 10px 0;
+  background: linear-gradient(168deg, #ffffff 0%, #f4f8fe 100%);
+  border: 1px solid #ffffff;
+  box-shadow:
+    0 18px 42px rgba(24, 36, 61, 0.08),
+    0 0 0 1px rgba(201, 162, 75, 0.22);
+  cursor: pointer;
+  opacity: 0.42;
+  transform: translate3d(0, 22px, 0) scale(0.97);
+  transition: opacity 0.65s var(--ease), transform 0.65s var(--ease), box-shadow 0.45s ease;
+  will-change: transform, opacity;
+}
+
+.journey-station.is-reached .station-card {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  box-shadow:
+    0 22px 50px rgba(24, 36, 61, 0.11),
+    0 0 0 1px rgba(201, 162, 75, 0.42);
+}
+
+.station-card:active {
+  transform: scale(0.985);
+}
+
+.station-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--violet-deep);
+  box-shadow: 0 12px 28px rgba(24, 36, 61, 0.12);
+}
+
+.station-media--square {
+  aspect-ratio: 1 / 1;
+}
+
+.station-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  transition: transform 0.75s var(--ease);
+}
+
+.station-media--arrival img {
+  object-position: center 28%;
+}
+
+.station-card:hover .station-media img {
+  transform: scale(1.04);
+}
+
+.station-media-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 23, 42, 0.24) 0%, transparent 32%, transparent 64%, rgba(14, 23, 42, 0.7) 100%);
+  pointer-events: none;
+}
+
+.chapter-pill {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(201, 162, 75, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--violet-royal);
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(24, 36, 61, 0.14);
+}
+
+.media-zoom-chip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 253, 253, 0.88);
+  color: var(--violet-royal);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px rgba(14, 23, 42, 0.24);
+}
+
+.station-body {
+  padding: 18px 18px 20px;
+  text-align: center;
+}
+
+.station-body h3 {
+  margin: 0 0 8px;
+  font-family: "Amiri", serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+}
+
+.station-body p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--plum-text);
+  line-height: 1.75;
+}
+
+.station-connector-label {
+  text-align: center;
+  padding: 10px 0 18px;
+}
+
+.station-connector-label span {
+  display: inline-block;
+  font-family: "Amiri", serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--plum-muted);
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(255, 253, 253, 0.65);
+  border: 1px dashed rgba(201, 162, 75, 0.42);
+}
+
+.jirtiq-cheer {
+  margin: 14px 0 0;
+  padding: 11px 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(251, 245, 230, 0.82), rgba(238, 244, 252, 0.68));
+  border: 1px solid rgba(201, 162, 75, 0.38);
+  font-family: "Amiri", serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+}
+
+/* =========================================================================
+   SECTION 4: VENUE LOCATION & WHATSAPP INQUIRY
+   ========================================================================= */
+
+.location-card {
+  text-align: center;
+  padding: 28px 20px;
+}
+
+.location-pin-badge {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--violet-royal), var(--plum-ink));
+  border: 1.5px solid var(--champagne-gold);
+  color: var(--champagne-light);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 26px rgba(24, 36, 61, 0.25);
+}
+
+.venue-name {
+  margin: 2px 0 4px;
+  font-family: "Amiri", serif;
+  font-size: 2.05rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+}
+
+.venue-city {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--plum-ink);
+}
+
+.venue-sub {
+  margin: 0 auto 20px;
+  font-size: 13px;
+  color: var(--plum-text);
+  max-width: 310px;
+}
+
+.location-btn-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.primary-royal-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--violet-royal) 0%, var(--plum-ink) 55%, var(--crimson-accent) 100%);
+  color: var(--pearl);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid rgba(201, 162, 75, 0.5);
+  box-shadow: 0 12px 28px rgba(24, 36, 61, 0.26);
+  transition: transform 0.25s var(--ease);
+}
+
+.primary-royal-btn:active {
+  transform: scale(0.97);
+}
+
+.secondary-glass-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: var(--rose-pure);
+  border: 1px solid var(--crimson-hairline);
+  color: var(--violet-royal);
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: transform 0.25s var(--ease), background 0.25s ease;
+}
+
+.secondary-glass-btn:active {
+  transform: scale(0.97);
+  background: var(--rose-dawn);
+}
+
+.card-divider {
+  margin: 24px auto 20px;
+}
+
+.whatsapp-inquiry-box {
+  padding: 20px 18px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(238, 244, 252, 0.85));
+  border: 1px solid rgba(201, 162, 75, 0.36);
+  box-shadow: 0 10px 26px rgba(24, 36, 61, 0.06), inset 0 1px 1px rgba(255, 255, 255, 1);
+}
+
+.inquiry-label {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--violet-royal);
+}
+
+.inquiry-phone {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--plum-ink);
+}
+
+.whatsapp-royal-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 18px;
+  border-radius: 14px;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--violet-deep) 0%, var(--violet-royal) 100%);
+  color: var(--champagne-light);
+  border: 1px solid var(--champagne-gold);
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(14, 23, 42, 0.22);
+  transition: transform 0.25s var(--ease);
+}
+
+.whatsapp-royal-btn:active {
+  transform: scale(0.97);
+}
+
+/* =========================================================================
+   SECTION 5: ROYAL FINALE
+   ========================================================================= */
+
+.finale-section {
+  padding-bottom: 44px;
+}
+
+.finale-card {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 34px 20px 28px;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 18%), rgba(255, 255, 255, 0.98) 0%, transparent 65%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(238, 244, 252, 0.86));
+  border: 1px solid rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 26px 64px rgba(24, 36, 61, 0.09),
+    0 0 0 1px rgba(201, 162, 75, 0.24),
+    inset 0 2px 2px rgba(255, 255, 255, 1);
+}
+
+.finale-heading {
+  margin: 4px 0 14px;
+  font-family: "Amiri", serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--violet-royal);
+}
+
+.finale-names {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.finale-names b {
+  font-family: "Aref Ruqaa", serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--violet-royal);
+  text-shadow: 0 2px 12px rgba(201, 162, 75, 0.3);
+}
+
+.finale-names i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--champagne-gold);
+  animation: heartPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+.finale-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.footer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--gold-hairline);
+  color: var(--violet-royal);
+  font-size: 12px;
+  font-weight: 600;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.footer-pill:active {
+  transform: scale(0.95);
+  background: var(--rose-dawn);
+}
+
+.copyright-note {
+  margin: 0;
+  font-size: 11px;
+  color: var(--plum-muted);
+}
+
+/* =========================================================================
+   PHOTO LIGHTBOX MODAL & TOAST
+   ========================================================================= */
+
+.photo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.photo-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 23, 42, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.modal-box {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--violet-deep);
+  border: 1px solid var(--gold-hairline);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+  transform: scale(0.94);
+  transition: transform 0.35s var(--ease);
+}
+
+.photo-modal.active .modal-box {
+  transform: scale(1);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 4;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(14, 23, 42, 0.78);
+  border: 1px solid var(--gold-hairline);
+  color: var(--champagne-light);
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+
+#modalImg {
+  width: 100%;
+  max-height: 76dvh;
+  object-fit: contain;
+  background: rgba(255, 248, 249, 0.04);
+}
+
+.modal-caption {
+  margin: 0;
+  padding: 12px 16px;
+  text-align: center;
+  font-family: "Amiri", serif;
+  font-size: 15px;
+  color: var(--champagne-light);
+  background: var(--violet-deep);
+}
+
+.toast-pill {
+  position: fixed;
+  bottom: max(26px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  z-index: 220;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--violet-deep);
+  color: var(--champagne-light);
+  border: 1px solid var(--champagne-gold);
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 12px 30px rgba(14, 23, 42, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s var(--ease);
+  white-space: nowrap;
+}
+
+.toast-pill.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* =========================================================================
+   SMALL MOBILE REFINEMENTS & REDUCED MOTION
+   ========================================================================= */
+
+@media (max-width: 360px) {
+  .intro-glass-card {
+    padding: 20px 16px 18px;
+  }
+  .royal-wax-seal {
+    width: 84px;
+    height: 84px;
+  }
+  .nav-pill {
+    font-size: 10.5px;
+    padding: 5px 8px;
+  }
+  .countdown-tile strong {
+    font-size: 1.45rem;
+  }
+  .journey-track-wrap {
+    padding-right: 34px;
+  }
+  .station-node {
+    right: -34px;
+    width: 26px;
+    height: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal,
+  .stanza-line,
+  .station-card {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+}
