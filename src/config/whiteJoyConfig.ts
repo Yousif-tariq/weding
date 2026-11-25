@@ -124,7 +124,7 @@ export const WHITE_JOY_CONFIG: WhiteJoyConfig = {
       traditionalCheer: "«يا عديلة يا بيضاء.. وسحائب بركة تفيض بالهناء»",
     },
     date: {
-      title: "موعد ليلتنا المباركة",
+      title: "موعدُ لقائنا والفرح",
       eyebrow: "الفصل الثالث · التاريخ والوقت",
       blessingLine: "ذلك بمشيئة الله تعالى — حضوركم يشرفنا",
     },

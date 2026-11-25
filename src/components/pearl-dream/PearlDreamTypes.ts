@@ -26,7 +26,7 @@ export const DREAM_GATES_META: GateMeta[] = [
   },
   {
     id: "date",
-    titleAr: "موعد ليلتنا المباركة",
+    titleAr: "موعدُ لقائنا والفرح",
     subtitleAr: "الساعة السماوية للفرح",
     shape: "organic",
   },

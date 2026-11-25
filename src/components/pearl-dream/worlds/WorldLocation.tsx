@@ -52,7 +52,7 @@ export function WorldLocation() {
         >
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[#5FD3CC]/45 bg-[#07262C]/70 px-3.5 py-1 text-[10.5px] font-semibold text-[#5FD3CC] backdrop-blur-md">
             <Sparkles className="h-3 w-3 text-[#F0D29C]" />
-            <span>وجهة ليلتنا المباركة</span>
+            <span>وجهة لقائنا والفرح</span>
           </span>
 
           <h2

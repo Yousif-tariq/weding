@@ -46,7 +46,7 @@ export function WorldDate() {
 
   return (
     <section
-      aria-label="عالم موعد ليلتنا المباركة"
+      aria-label="عالم موعدُ لقائنا والفرح"
       className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden px-5 pt-20 pb-28 text-center"
     >
       {/* Monumental Rotating Futuristic Telemetry Rings Behind Card */}
