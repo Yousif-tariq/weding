@@ -103,7 +103,7 @@ export function AmbientMusicController({
   useEffect(() => {
     const audio = new Audio(src);
     audio.loop = true;
-    audio.preload = "auto";
+    audio.preload = "metadata";
     audio.volume = 0;
     audioRef.current = audio;
 

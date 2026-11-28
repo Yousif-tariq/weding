@@ -90,7 +90,7 @@ export const WHITE_JOY_CONFIG: WhiteJoyConfig = {
     receptionPhoto: "/images/reception.jpg",
     zaffaPhoto: "/images/arrival.jpg",
     jirtiqPhoto: "/images/jirtiq.jpg",
-    ambientMusicUrl: "/audio/ordinary-alex-warren.mp3",
+    ambientMusicUrl: "/audio/wedding-song.m4a",
   },
   event: {
     isoDate: "2026-12-03T20:00:00+03:00",
@@ -102,7 +102,7 @@ export const WHITE_JOY_CONFIG: WhiteJoyConfig = {
   },
   venue: {
     name: "قاعة ريماس للاحتفالات",
-    cityDistrict: "الرياض — حي الشفاء",
+    cityDistrict: "الرياض حي الشفاء",
     mapsUrl: "https://maps.app.goo.gl/PpPdYDgY5c9Vi3b18?g_st=iw",
     whatsappNumber: "966530124082",
     whatsappDisplay: "+966 53 012 4082",
@@ -110,10 +110,10 @@ export const WHITE_JOY_CONFIG: WhiteJoyConfig = {
   chapters: {
     welcome: {
       title: "بحضوركم تكتمل فرحتنا",
-      eyebrow: "الفصل الأول · الاستقبال",
+      eyebrow: "الفصل الأول الاستقبال",
       message:
-        "بقلوبٍ يملؤها الشوق، وتغمرها السعادة، نتشرّف بدعوتكم لتكونوا شركاء فرحتنا، وتشاركونا ليلةً من ليالي العمر الجميلة، نحتفي فيها بأجمل المناسبات، ونرجو أن تكتمل أفراحنا بوجودكم، فأنتم للّمة عنوان، وللفرح أجمل حضور.",
-      closingLine: "أهلاً بمن أناروا ليلتنا وتشرفنا بهم",
+        "بقلوب يملؤها الشوق وتغمرها السعادة نتشرف بدعوتكم لتكونوا شركاء فرحتنا وتشاركونا ليلة من ليالي العمر الجميلة نحتفي فيها بأجمل المناسبات ونرجو أن تكتمل أفراحنا بوجودكم فأنتم للمة عنوان وللفرح أجمل حضور",
+      closingLine: "أهلا بمن أناروا ليلتنا وتشرفنا بهم",
     },
     jirtiq: {
       title: "زفة العمر وبركة الجرتق",

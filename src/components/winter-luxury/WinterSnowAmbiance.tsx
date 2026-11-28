@@ -1,27 +1,21 @@
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { LUXURY_EASE } from "../../animations/motionPresets";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 /**
  * Ultra-lightweight Scroll-Reactive Quiet Luxury Winter Snow Ambiance
- * Seamlessly cross-fades four luminous ambient light moods as the guest scrolls:
+ * Pure GPU opacity cross-fade across 4 luminous ambient light moods (zero blur-3xl overhead):
  * 1. Bright Snow-White («دعوة فرح كريمة»)
  * 2. Serene Crystal-Blue («الوقت المتبقي للفرح»)
  * 3. Soft Warm Champagne-Gold («تفاصيل المناسبة»)
  * 4. Warm Pearlescent Rose-Ivory Glow («الخاتمة»)
  */
 const SNOW_MOTES = [
-  { left: "6%", size: 5, dur: 18, delay: 0 },
-  { left: "14%", size: 7, dur: 22, delay: -6 },
-  { left: "23%", size: 4, dur: 16, delay: -11 },
-  { left: "31%", size: 6, dur: 24, delay: -3 },
-  { left: "40%", size: 5, dur: 19, delay: -14 },
-  { left: "48%", size: 8, dur: 26, delay: -8 },
-  { left: "57%", size: 4, dur: 17, delay: -2 },
-  { left: "65%", size: 6, dur: 23, delay: -15 },
-  { left: "74%", size: 5, dur: 20, delay: -9 },
-  { left: "82%", size: 7, dur: 25, delay: -4 },
-  { left: "90%", size: 4, dur: 18, delay: -12 },
-  { left: "95%", size: 6, dur: 21, delay: -7 },
+  { left: "8%", size: 5, dur: 19, delay: 0 },
+  { left: "21%", size: 7, dur: 23, delay: -6 },
+  { left: "35%", size: 4, dur: 17, delay: -11 },
+  { left: "49%", size: 6, dur: 25, delay: -3 },
+  { left: "63%", size: 5, dur: 20, delay: -14 },
+  { left: "77%", size: 7, dur: 24, delay: -8 },
+  { left: "90%", size: 5, dur: 18, delay: -4 },
 ];
 
 interface WinterSnowAmbianceProps {
@@ -29,7 +23,6 @@ interface WinterSnowAmbianceProps {
 }
 
 export function WinterSnowAmbiance({ active = false }: WinterSnowAmbianceProps) {
-  const prefersReduced = Boolean(useReducedMotion());
   const { scrollYProgress } = useScroll();
 
   // Smooth GPU-composited opacity cross-fades across the 4 invitation chapters
@@ -49,7 +42,7 @@ export function WinterSnowAmbiance({ active = false }: WinterSnowAmbianceProps) 
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden contain-strict"
     >
       {/* Base Bright Snow-White Canvas */}
       <div className="absolute inset-0 bg-[#F8FBFF]" />
@@ -94,86 +87,20 @@ export function WinterSnowAmbiance({ active = false }: WinterSnowAmbianceProps) 
         className="absolute inset-0 will-change-[opacity]"
       />
 
-      {/* Post-Open Enchanted Crystal-Card Ambient Light Layer */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: active ? 1 : 0 }}
-        transition={{ duration: 1.4, ease: LUXURY_EASE }}
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
-        {/* Slow Rotating Conic Crystal-Light Veil (Matches the Card's Orbiting Light) */}
+      {/* Lightweight Zero-Blur Radial Ambient Light Halo (Matches Card Glow) */}
+      {active && (
         <div
-          className={
-            prefersReduced
-              ? "absolute top-1/2 left-1/2 h-[180vmax] w-[180vmax] -translate-x-1/2 -translate-y-1/2 opacity-30 blur-3xl"
-              : "orbit-light-ring absolute top-1/2 left-1/2 h-[180vmax] w-[180vmax] opacity-35 blur-3xl"
-          }
+          className="pointer-events-none absolute inset-0"
           style={{
-            animationDuration: "22s",
             background:
-              "conic-gradient(from 0deg, transparent 0deg, rgba(255, 255, 255, 0.72) 75deg, rgba(200, 169, 119, 0.30) 150deg, transparent 215deg, rgba(240, 54, 88, 0.14) 275deg, rgba(155, 183, 212, 0.32) 325deg, transparent 360deg)",
-          }}
-        />
-
-        {/* Soft Breathing Champagne-Gold Light Orb (Top Right) */}
-        <motion.div
-          animate={
-            prefersReduced
-              ? undefined
-              : {
-                  x: [0, -34, 18, 0],
-                  y: [0, 26, -16, 0],
-                  scale: [1, 1.12, 0.96, 1],
-                  opacity: [0.35, 0.55, 0.4, 0.35],
-                }
-          }
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-24 -right-24 h-[420px] w-[420px] rounded-full bg-radial from-[#E6CFA5]/42 via-[#C8A977]/16 to-transparent blur-3xl"
-        />
-
-        {/* Soft Breathing Rose-Ruby & Frost Whisper Orb (Center-Left) */}
-        <motion.div
-          animate={
-            prefersReduced
-              ? undefined
-              : {
-                  x: [0, 40, -20, 0],
-                  y: [0, -30, 24, 0],
-                  scale: [1, 1.15, 0.94, 1],
-                  opacity: [0.22, 0.38, 0.25, 0.22],
-                }
-          }
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[38%] -left-28 h-[460px] w-[460px] rounded-full bg-radial from-[#F03658]/14 via-[#D8A7A0]/18 to-transparent blur-3xl"
-        />
-
-        {/* Soft Breathing Pure Snow-White & Ice-Blue Halo (Bottom Center) */}
-        <motion.div
-          animate={
-            prefersReduced
-              ? undefined
-              : {
-                  x: [0, -28, 28, 0],
-                  y: [0, -22, 12, 0],
-                  scale: [1, 1.08, 0.95, 1],
-                  opacity: [0.42, 0.65, 0.46, 0.42],
-                }
-          }
-          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -bottom-28 left-1/2 h-[420px] w-[560px] -translate-x-1/2 rounded-full bg-radial from-white/78 via-[#B6D2EC]/28 to-transparent blur-3xl"
-        />
-
-        {/* Delicate Luminous Crystal Rim Glow Around Viewport Edges */}
-        <div
-          className="absolute inset-0"
-          style={{
+              "radial-gradient(circle at 86% 12%, rgba(230, 207, 165, 0.28) 0%, transparent 44%), radial-gradient(circle at 12% 48%, rgba(240, 54, 88, 0.08) 0%, transparent 46%), radial-gradient(circle at 50% 92%, rgba(255, 255, 255, 0.72) 0%, transparent 52%)",
             boxShadow:
-              "inset 0 0 90px rgba(255, 255, 255, 0.72), inset 0 0 36px rgba(200, 169, 119, 0.14)",
+              "inset 0 0 70px rgba(255, 255, 255, 0.68), inset 0 0 28px rgba(200, 169, 119, 0.12)",
           }}
         />
-      </motion.div>
+      )}
 
-      {/* Ultra-Gentle Drifting Snowflakes / Frost Light Motes */}
+      {/* Ultra-Gentle GPU-Only Drifting Snowflakes */}
       {SNOW_MOTES.map((m, idx) => (
         <span
           key={idx}
