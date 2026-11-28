@@ -4,25 +4,32 @@ import { VolumeX } from "lucide-react";
 interface AmbientMusicControllerProps {
   src: string;
   replayToken: number;
+  /** When false (e.g. while viewing the Quranic verse section), music stays paused automatically */
+  allowed?: boolean;
 }
 
 const TARGET_VOLUME = 0.78;
 
 /**
  * Studio-Grade Ambient Soundtrack Controller
- * - Smooth exponential-feeling fade-in (1.6s) & fade-out (0.45s)
- * - Attempts immediate autoplay on load; seamlessly unlocks on first touch/click if browser blocks
- * - Loops seamlessly and stays synchronized with app replay
- * - Renders a minimal luxury golden equalizer pill in the top-left corner
+ * - Automatically stays silent / pauses whenever `allowed` is false (Quranic verse screen)
+ * - Silently primes mobile audio permission on the first tap without audible sound on the verse screen
+ * - Smoothly fades in (1.4s) as soon as the guest scrolls into the next section, and fades out (0.45s) on return
  */
 export function AmbientMusicController({
   src,
   replayToken,
+  allowed = true,
 }: AmbientMusicControllerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeRafRef = useRef<number | null>(null);
   const userMutedRef = useRef(false);
+  const allowedRef = useRef(allowed);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    allowedRef.current = allowed;
+  }, [allowed]);
 
   const cancelFade = useCallback(() => {
     if (fadeRafRef.current !== null) {
@@ -45,7 +52,6 @@ export function AmbientMusicController({
 
       const step = (now: number) => {
         const progress = Math.min(1, (now - start) / durationMs);
-        // Smooth ease-out curve
         const eased = 1 - Math.pow(1 - progress, 3);
         audio.volume = Math.max(0, Math.min(1, from + (to - from) * eased));
 
@@ -64,13 +70,14 @@ export function AmbientMusicController({
 
   const startWithFadeIn = useCallback(async () => {
     const audio = audioRef.current;
-    if (!audio || userMutedRef.current) return false;
+    if (!audio || userMutedRef.current || !allowedRef.current) return false;
 
     try {
+      audio.muted = false;
       audio.volume = 0;
       await audio.play();
       setIsPlaying(true);
-      fadeVolume(audio, 0, TARGET_VOLUME, 1600);
+      fadeVolume(audio, 0, TARGET_VOLUME, 1400);
       return true;
     } catch {
       setIsPlaying(false);
@@ -78,7 +85,21 @@ export function AmbientMusicController({
     }
   }, [fadeVolume]);
 
-  // Initialize audio element, attempt autoplay, and unlock smoothly on first gesture
+  const stopWithFadeOut = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    setIsPlaying(false);
+    if (audio.paused) {
+      cancelFade();
+      audio.volume = 0;
+      return;
+    }
+    fadeVolume(audio, audio.volume, 0, 450, () => {
+      audio.pause();
+    });
+  }, [cancelFade, fadeVolume]);
+
+  // Initialize audio element & silently prime browser audio unlock on first gesture
   useEffect(() => {
     const audio = new Audio(src);
     audio.loop = true;
@@ -86,42 +107,50 @@ export function AmbientMusicController({
     audio.volume = 0;
     audioRef.current = audio;
 
-    let unlocked = false;
+    let primed = false;
 
-    const tryUnlock = async () => {
-      if (unlocked || userMutedRef.current) return;
-      const ok = await startWithFadeIn();
-      if (ok) {
-        unlocked = true;
-        window.removeEventListener("pointerdown", tryUnlock);
-        window.removeEventListener("touchstart", tryUnlock);
-        window.removeEventListener("click", tryUnlock);
-        window.removeEventListener("keydown", tryUnlock);
+    const handleGesture = async () => {
+      if (userMutedRef.current) return;
+
+      if (allowedRef.current) {
+        const ok = await startWithFadeIn();
+        if (ok) primed = true;
+      } else if (!primed) {
+        // Silently unlock iOS/Android playback permission while staying silent on the Quranic verse
+        try {
+          audio.muted = true;
+          audio.volume = 0;
+          await audio.play();
+          audio.pause();
+          audio.currentTime = 0;
+          audio.muted = false;
+          primed = true;
+        } catch {
+          audio.muted = false;
+        }
       }
     };
 
-    // Attempt immediate autoplay on link open
-    void tryUnlock();
+    window.addEventListener("pointerdown", handleGesture, { passive: true });
+    window.addEventListener("touchstart", handleGesture, { passive: true });
+    window.addEventListener("click", handleGesture, { passive: true });
+    window.addEventListener("keydown", handleGesture, { passive: true });
 
-    window.addEventListener("pointerdown", tryUnlock, { passive: true });
-    window.addEventListener("touchstart", tryUnlock, { passive: true });
-    window.addEventListener("click", tryUnlock, { passive: true });
-    window.addEventListener("keydown", tryUnlock, { passive: true });
-
-    // Keep music alive cleanly if tab returns to foreground
     const onVisibility = () => {
-      if (!document.hidden && !userMutedRef.current && audio.paused && unlocked) {
-        void audio.play().catch(() => {});
+      if (document.hidden) {
+        audio.pause();
+      } else if (!userMutedRef.current && allowedRef.current && audio.paused) {
+        void startWithFadeIn();
       }
     };
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       cancelFade();
-      window.removeEventListener("pointerdown", tryUnlock);
-      window.removeEventListener("touchstart", tryUnlock);
-      window.removeEventListener("click", tryUnlock);
-      window.removeEventListener("keydown", tryUnlock);
+      window.removeEventListener("pointerdown", handleGesture);
+      window.removeEventListener("touchstart", handleGesture);
+      window.removeEventListener("click", handleGesture);
+      window.removeEventListener("keydown", handleGesture);
       document.removeEventListener("visibilitychange", onVisibility);
       audio.pause();
       audio.src = "";
@@ -129,11 +158,22 @@ export function AmbientMusicController({
     };
   }, [src, startWithFadeIn, cancelFade]);
 
-  // Synchronize restart when the user replays the invitation from the beginning
+  // React automatically when entering or leaving the Quranic verse section
+  useEffect(() => {
+    if (allowed) {
+      if (!userMutedRef.current) {
+        void startWithFadeIn();
+      }
+    } else {
+      stopWithFadeOut();
+    }
+  }, [allowed, startWithFadeIn, stopWithFadeOut]);
+
+  // Synchronize restart when replaying from the beginning
   useEffect(() => {
     if (replayToken === 0) return;
     const audio = audioRef.current;
-    if (!audio || userMutedRef.current) return;
+    if (!audio || userMutedRef.current || !allowedRef.current) return;
 
     audio.currentTime = 0;
     void startWithFadeIn();
@@ -145,24 +185,32 @@ export function AmbientMusicController({
 
     if (isPlaying) {
       userMutedRef.current = true;
-      setIsPlaying(false);
-      fadeVolume(audio, audio.volume, 0, 450, () => {
-        audio.pause();
-      });
+      stopWithFadeOut();
     } else {
       userMutedRef.current = false;
-      await startWithFadeIn();
+      if (allowedRef.current) {
+        await startWithFadeIn();
+      }
     }
   };
 
+  // Hide or dim button slightly when on the verse section (or keep subtle muted state)
   return (
     <div className="fixed top-[max(1rem,env(safe-area-inset-top))] left-4 z-50">
       <button
         type="button"
         onClick={handleToggle}
         aria-label={isPlaying ? "إيقاف الموسيقى" : "تشغيل الموسيقى"}
-        title={isPlaying ? "إيقاف الموسيقى" : "تشغيل الموسيقى"}
-        className="ruby-glass-keycap inline-flex h-10 w-10 items-center justify-center rounded-[12px]"
+        title={
+          !allowed
+            ? "تعمل الموسيقى تلقائياً عند التمرير بعد الآية الكريمة"
+            : isPlaying
+              ? "إيقاف الموسيقى"
+              : "تشغيل الموسيقى"
+        }
+        className={`ruby-glass-keycap inline-flex h-10 w-10 items-center justify-center rounded-[12px] transition-opacity duration-300 ${
+          !allowed ? "opacity-60" : "opacity-100"
+        }`}
       >
         {isPlaying ? (
           <span

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { WinterSnowAmbiance } from "./components/winter-luxury/WinterSnowAmbiance";
+import { RubyCrystalCurtain } from "./components/winter-luxury/RubyCrystalCurtain";
 import { WinterHeroSection } from "./components/winter-luxury/WinterHeroSection";
 import {
   WinterInvitationCardSection,
@@ -12,21 +13,51 @@ import { LUXURY_EASE } from "./animations/motionPresets";
 
 export function App() {
   const [opened, setOpened] = useState(false);
+  const [isPastVerseSection, setIsPastVerseSection] = useState(false);
+
+  // Automatically pause music while on the Quranic verse hero section,
+  // and start playing smoothly as soon as the guest scrolls to the next section
+  useEffect(() => {
+    if (!opened) {
+      setIsPastVerseSection(false);
+      return;
+    }
+
+    const checkScrollPosition = () => {
+      const heroEl = document.getElementById("hero-verse");
+      if (!heroEl) return;
+      const rect = heroEl.getBoundingClientRect();
+      setIsPastVerseSection(rect.bottom <= window.innerHeight * 0.45);
+    };
+
+    checkScrollPosition();
+    window.addEventListener("scroll", checkScrollPosition, { passive: true });
+    window.addEventListener("resize", checkScrollPosition, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", checkScrollPosition);
+      window.removeEventListener("resize", checkScrollPosition);
+    };
+  }, [opened]);
 
   return (
     <main className="relative min-h-[100dvh] w-full overflow-x-clip bg-[#F7FAFD] text-[#1E2A38]">
+      {/* Enchanted Ruby-Red Crystal Glass Curtain (Opens Automatically After 2 Seconds) */}
+      <RubyCrystalCurtain />
+
       {/* Lightweight Winter Snow Frost Glow & Gentle Snowfall Motes */}
       <WinterSnowAmbiance />
 
-      {/* Optional Ambient Wedding Soundtrack (Fades in Smoothly on Open) */}
+      {/* Ambient Wedding Soundtrack — Pauses Automatically on the Quranic Verse Section */}
       {WHITE_JOY_CONFIG.media.ambientMusicUrl && (
         <AmbientMusicController
           src={WHITE_JOY_CONFIG.media.ambientMusicUrl}
           replayToken={0}
+          allowed={opened && isPastVerseSection}
         />
       )}
 
-      {/* Futuristic Reception-Backdrop Hero Gateway (First Screen) -> Unlocks Full Invitation */}
+      {/* Futuristic Gateway Hero (First Screen) -> Unlocks Full Invitation */}
       <div className="relative z-10">
         <WinterHeroSection opened={opened} onOpen={() => setOpened(true)} />
 

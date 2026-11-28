@@ -62,6 +62,7 @@ export function WinterHeroSection({ opened, onOpen }: WinterHeroSectionProps) {
 
   return (
     <section
+      id="hero-verse"
       aria-label="المدخل الرئيسي: دعوة زفاف مصطفى وإيثار"
       className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden px-5 py-16 text-center"
     >

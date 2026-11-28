@@ -1,13 +1,16 @@
-import { useMemo } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import {
   Calendar,
   CalendarPlus,
   Clock,
+  Crown,
+  Heart,
   MapPin,
   MessageCircle,
   Navigation,
   Sparkles,
+  Utensils,
 } from "lucide-react";
 import { WHITE_JOY_CONFIG } from "../../config/whiteJoyConfig";
 import { toArabicDigits, useCountdown } from "../../hooks/useCountdown";
@@ -21,11 +24,82 @@ const sectionReveal = {
   transition: { duration: 0.9, ease: LUXURY_EASE },
 };
 
+const CARD_SNOWFLAKES = [
+  { left: "8%", size: 6, dur: 6.2, delay: 0.0, drift: 12 },
+  { left: "20%", size: 4, dur: 5.0, delay: 0.8, drift: -10 },
+  { left: "34%", size: 7, dur: 6.8, delay: 0.3, drift: 14 },
+  { left: "48%", size: 5, dur: 5.6, delay: 1.1, drift: -12 },
+  { left: "62%", size: 8, dur: 7.0, delay: 0.5, drift: 15 },
+  { left: "76%", size: 4, dur: 4.9, delay: 1.4, drift: -11 },
+  { left: "89%", size: 6, dur: 6.1, delay: 0.2, drift: 10 },
+  { left: "14%", size: 5, dur: 5.8, delay: 2.0, drift: -13 },
+  { left: "54%", size: 6, dur: 6.4, delay: 1.7, drift: 12 },
+  { left: "82%", size: 7, dur: 6.9, delay: 2.3, drift: -14 },
+];
+
 export function WinterInvitationCardSection() {
-  const { brand, event, chapters } = WHITE_JOY_CONFIG;
+  const { brand, chapters } = WHITE_JOY_CONFIG;
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const inView = useInView(sectionRef, { once: true, amount: 0.25 });
+  const prefersReduced = Boolean(useReducedMotion());
+
+  const fam1 = brand.families[0];
+  const joiner = "و";
+  const fam2 = brand.families[1];
+  const bodyMsg = chapters.welcome.message;
+  const totalChars = fam1.length + joiner.length + fam2.length + bodyMsg.length;
+
+  const [typedChars, setTypedChars] = useState(prefersReduced ? totalChars : 0);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (prefersReduced) {
+      setTypedChars(totalChars);
+      return;
+    }
+
+    let count = 0;
+    let timer = 0;
+    let cancelled = false;
+
+    const step = () => {
+      if (cancelled) return;
+      if (count >= totalChars) return;
+      count += 1;
+      setTypedChars(count);
+
+      // Gentle poetic cadence: brief pause after each family line
+      const atEndFam1 = count === fam1.length;
+      const atEndJoiner = count === fam1.length + joiner.length;
+      const atEndFam2 = count === fam1.length + joiner.length + fam2.length;
+      const delay = atEndFam1 || atEndFam2 ? 240 : atEndJoiner ? 160 : 34;
+
+      timer = window.setTimeout(step, delay);
+    };
+
+    timer = window.setTimeout(step, 320);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [inView, prefersReduced, totalChars, fam1.length, joiner.length, fam2.length]);
+
+  const fam1Text = fam1.slice(0, Math.min(typedChars, fam1.length));
+  const joinerOffset = Math.max(0, typedChars - fam1.length);
+  const joinerText = joiner.slice(0, Math.min(joinerOffset, joiner.length));
+  const fam2Offset = Math.max(0, typedChars - fam1.length - joiner.length);
+  const fam2Text = fam2.slice(0, Math.min(fam2Offset, fam2.length));
+  const bodyOffset = Math.max(
+    0,
+    typedChars - fam1.length - joiner.length - fam2.length
+  );
+  const bodyText = bodyMsg.slice(0, Math.min(bodyOffset, bodyMsg.length));
+  const isTypingDone = typedChars >= totalChars;
+  const showDivider = typedChars >= fam1.length + joiner.length + fam2.length;
 
   return (
     <section
+      ref={sectionRef}
       id="invitation"
       aria-label="دعوة كريمة"
       className="relative z-10 flex min-h-[100dvh] w-full items-center justify-center px-5 pt-20 pb-14 sm:py-20"
@@ -34,84 +108,131 @@ export function WinterInvitationCardSection() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, ease: LUXURY_EASE }}
-        className="winter-glass mx-auto w-full max-w-[920px] overflow-hidden rounded-[28px] p-4 sm:p-7"
+        className="relative mx-auto w-full max-w-[740px] rounded-[30px] p-[2.5px] shadow-[0_28px_72px_rgba(30,42,56,0.10)]"
       >
-        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-12 md:gap-10">
-          {/* Editorial Portrait Showcase (Cropped cleanly on the couple & glowing ice-blue floral ring) */}
-          <div className="md:col-span-5">
-            <div className="relative overflow-hidden rounded-[22px] border border-[#C8A977]/45 bg-white p-2 shadow-[0_20px_48px_rgba(30,42,56,0.12)]">
-              <div className="relative h-[340px] w-full overflow-hidden rounded-[16px] sm:h-[390px] md:h-[440px]">
-                <img
-                  src="/images/jirtiq.jpg"
-                  alt={`الجرتق السوداني وفرحة ${brand.groomAr} و${brand.brideAr}`}
-                  loading="eager"
-                  className="h-full w-full scale-[1.03] object-cover object-center transition-transform duration-700 hover:scale-[1.07]"
-                />
-                {/* Delicate Winter-Frost Vignette & Editorial Caption */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1E2A38]/75 via-transparent to-[#E4EEF7]/15"
-                />
-                <div className="absolute inset-x-0 bottom-4 px-4 text-center">
-                  <p
-                    className="text-2xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]"
-                    style={{ fontFamily: "var(--font-calligraphy)" }}
-                  >
-                    {brand.groomAr}{" "}
-                    <span className="text-[#E6CFA5]">&amp;</span>{" "}
-                    {brand.brideAr}
-                  </p>
-                  <p className="mt-0.5 text-[11px] font-medium tracking-widest text-[#E4EEF7]/90">
-                    {event.gregorianDisplayAr}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Soft Outer Luminous Aura Around Card Edges */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-1.5 overflow-hidden rounded-[34px] opacity-65 blur-md"
+        >
+          <div
+            className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+            style={{
+              background:
+                "conic-gradient(from 0deg, transparent 0deg, transparent 225deg, rgba(255, 255, 255, 0.95) 268deg, rgba(200, 169, 119, 0.95) 300deg, rgba(240, 54, 88, 0.72) 330deg, rgba(255, 255, 255, 0.95) 352deg, transparent 360deg)",
+            }}
+          />
+        </div>
 
-          {/* Serene Centered Invitation Typography */}
-          <div className="px-2 py-2 text-center md:col-span-7 md:px-4">
-            <span className="inline-block text-xs font-semibold tracking-[0.2em] text-[#C8A977]">
-              ✦ دعوة كريمة ✦
+        {/* Crisp Orbiting Light Beam Tracing the Card Border */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[30px]"
+        >
+          <div
+            className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+            style={{
+              background:
+                "conic-gradient(from 0deg, rgba(255, 255, 255, 0.35) 0deg, rgba(155, 183, 212, 0.25) 215deg, rgba(255, 255, 255, 1) 262deg, rgba(200, 169, 119, 1) 298deg, rgba(240, 54, 88, 0.85) 332deg, rgba(255, 255, 255, 1) 352deg, rgba(255, 255, 255, 0.35) 360deg)",
+            }}
+          />
+        </div>
+
+        {/* Pure Transparent Crystal-Glass Inner Surface */}
+        <div className="relative overflow-hidden rounded-[28px] border border-white/65 bg-white/32 p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.92),inset_0_-1px_16px_rgba(255,255,255,0.45)] backdrop-blur-2xl sm:p-10 md:p-12">
+        {/* Pure Snow-White Falling Snowfall Inside the Card */}
+        {!prefersReduced && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
+          >
+            {CARD_SNOWFLAKES.map((flake, idx) => (
+              <motion.span
+                key={idx}
+                initial={{ y: "-10%", x: 0, opacity: 0 }}
+                animate={{
+                  y: "115%",
+                  x: [0, flake.drift, -flake.drift * 0.6, flake.drift * 0.4],
+                  opacity: [0, 0.95, 0.9, 0],
+                }}
+                transition={{
+                  duration: flake.dur,
+                  delay: flake.delay,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                style={{
+                  left: flake.left,
+                  width: flake.size,
+                  height: flake.size,
+                }}
+                className="absolute top-0 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,1),0_0_18px_rgba(186,216,245,0.8)]"
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Enchanted Live-Written Invitation Typography */}
+        <div className="relative z-10 mx-auto max-w-2xl px-2 py-2 text-center sm:px-4">
+            <span
+              className="ruby-glass-keycap inline-flex items-center gap-2.5 rounded-[18px] px-7 py-2.5 text-2xl font-bold tracking-wide sm:text-3xl"
+              style={{ fontFamily: "var(--font-calligraphy)" }}
+            >
+              <span className="text-base text-[#FFE3EA]">✦</span>
+              <span>دعوة كريمة</span>
+              <span className="text-base text-[#FFE3EA]">✦</span>
             </span>
 
-            <div className="mt-5 flex flex-col items-center gap-1">
+            <div className="mt-6 flex min-h-[116px] flex-col items-center gap-1.5" aria-live="polite">
               <p
-                className="text-xl font-bold text-[#1E2A38] sm:text-2xl"
+                className="text-2xl font-bold text-[#1E2A38] sm:text-3xl"
                 style={{ fontFamily: "var(--font-display-ar)" }}
               >
-                {brand.families[0]}
+                {fam1Text}
+                {typedChars > 0 && typedChars < fam1.length && (
+                  <span className="mr-1 inline-block h-[0.95em] w-[2px] translate-y-1 animate-pulse bg-[#D82648]" />
+                )}
               </p>
-              <span className="text-sm font-semibold text-[#C8A977]">و</span>
-              <p
-                className="text-xl font-bold text-[#1E2A38] sm:text-2xl"
-                style={{ fontFamily: "var(--font-display-ar)" }}
-              >
-                {brand.families[1]}
-              </p>
+
+              {joinerText && (
+                <span
+                  className="text-lg font-bold text-[#C8A977]"
+                  style={{ fontFamily: "var(--font-display-ar)" }}
+                >
+                  {joinerText}
+                </span>
+              )}
+
+              {fam2Text && (
+                <p
+                  className="text-2xl font-bold text-[#1E2A38] sm:text-3xl"
+                  style={{ fontFamily: "var(--font-display-ar)" }}
+                >
+                  {fam2Text}
+                  {fam2Offset > 0 && fam2Offset < fam2.length && (
+                    <span className="mr-1 inline-block h-[0.95em] w-[2px] translate-y-1 animate-pulse bg-[#D82648]" />
+                  )}
+                </p>
+              )}
             </div>
 
-            <div
+            <motion.div
               aria-hidden="true"
-              className="mx-auto my-6 h-[1px] w-28 bg-gradient-to-r from-transparent via-[#C8A977]/80 to-transparent"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={
+                showDivider
+                  ? { scaleX: 1, opacity: 1 }
+                  : { scaleX: 0, opacity: 0 }
+              }
+              transition={{ duration: 0.75, ease: LUXURY_EASE }}
+              className="mx-auto my-5 h-[1.5px] w-32 bg-gradient-to-r from-transparent via-[#C8A977] to-transparent"
             />
 
-            <p className="mx-auto max-w-xl text-base leading-[2.1] font-normal text-[#2B3746] sm:text-lg">
-              {chapters.welcome.message}
-            </p>
-
-            <p
-              className="mx-auto mt-5 max-w-lg text-sm leading-[1.95] font-medium text-[#5A6B7C] sm:text-base"
-              style={{ fontFamily: "var(--font-display-ar)" }}
-            >
-              {chapters.jirtiq.jirtiqCopy}
-            </p>
-
-            <p
-              className="mt-5 text-base font-semibold text-[#AE8E5B] sm:text-lg"
-              style={{ fontFamily: "var(--font-display-ar)" }}
-            >
-              {chapters.jirtiq.traditionalCheer}
+            <p className="mx-auto min-h-[108px] max-w-xl text-base leading-[2.15] font-medium text-[#2B3746] sm:text-lg">
+              {bodyText}
+              {bodyOffset > 0 && !isTypingDone && (
+                <span className="mr-1 inline-block h-[1em] w-[2px] translate-y-1 animate-pulse bg-[#D82648] shadow-[0_0_8px_#D82648]" />
+              )}
             </p>
           </div>
         </div>
@@ -120,9 +241,46 @@ export function WinterInvitationCardSection() {
   );
 }
 
+const EVENING_PROGRAM = [
+  {
+    step: "٠١",
+    title: "استقبال الأحبة",
+    time: "٨:٣٠ م",
+    subtitle: "نرحب بكم بكل الحب والبهجة",
+    Icon: Heart,
+    delay: "0s",
+  },
+  {
+    step: "٠٢",
+    title: "العشاء",
+    time: "١٠:٠٠ م",
+    subtitle: "مأدبة الفرح على شرف حضوركم",
+    Icon: Utensils,
+    delay: "-2.3s",
+  },
+  {
+    step: "٠٣",
+    title: "الزفة",
+    time: "١٢:٠٠ ص",
+    subtitle: "إطلالة العروسين في ليلة الفرح الأبيض",
+    Icon: Crown,
+    delay: "-4.6s",
+  },
+];
+
 export function WinterInvitationSections() {
   const { brand, event, venue } = WHITE_JOY_CONFIG;
   const countdown = useCountdown(event.isoDate);
+  const prefersReduced = Boolean(useReducedMotion());
+  const [activeStage, setActiveStage] = useState(0);
+
+  useEffect(() => {
+    if (prefersReduced) return;
+    const interval = window.setInterval(() => {
+      setActiveStage((prev) => (prev + 1) % EVENING_PROGRAM.length);
+    }, 3000);
+    return () => window.clearInterval(interval);
+  }, [prefersReduced]);
 
   const hijriDisplay = useMemo(() => {
     try {
@@ -161,194 +319,417 @@ export function WinterInvitationSections() {
             className="mt-3 text-3xl font-bold text-[#1E2A38] sm:text-4xl"
             style={{ fontFamily: "var(--font-display-ar)" }}
           >
-            الوقت المتبقي للاحتفال
+            الوقت المتبقي للفرح
           </h2>
 
-          {/* Unified Futuristic Frosted-Crystal Chronometer Console */}
-          <div className="winter-glass relative mt-10 overflow-hidden rounded-[28px] border border-[#9BB7D4]/45 p-4 shadow-[0_28px_70px_rgba(30,42,56,0.08)] sm:p-6">
-            {/* Precision Architectural Corner Brackets */}
-            <span aria-hidden="true" className="pointer-events-none absolute top-3 right-3 h-4 w-4 border-t-2 border-r-2 border-[#C8A977]/70" />
-            <span aria-hidden="true" className="pointer-events-none absolute top-3 left-3 h-4 w-4 border-t-2 border-l-2 border-[#C8A977]/70" />
-            <span aria-hidden="true" className="pointer-events-none absolute right-3 bottom-3 h-4 w-4 border-r-2 border-b-2 border-[#9BB7D4]/75" />
-            <span aria-hidden="true" className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b-2 border-l-2 border-[#9BB7D4]/75" />
-
-            {/* Top Laser Prism Horizon Line */}
-            <span
+          {/* Unified Transparent Crystal-Glass Chronometer Console with Orbiting Edge Light */}
+          <div className="relative mt-10 rounded-[30px] p-[2px] shadow-[0_28px_70px_rgba(30,42,56,0.08)]">
+            {/* Soft Outer Luminous Aura Around Console */}
+            <div
               aria-hidden="true"
-              className="pointer-events-none absolute top-0 inset-x-12 h-[2px] bg-gradient-to-r from-transparent via-[#C8A977]/80 to-transparent"
-            />
+              className="pointer-events-none absolute -inset-1 overflow-hidden rounded-[34px] opacity-55 blur-md"
+            >
+              <div
+                className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0deg, transparent 225deg, rgba(255, 255, 255, 0.95) 268deg, rgba(200, 169, 119, 0.95) 300deg, rgba(240, 54, 88, 0.7) 330deg, rgba(255, 255, 255, 0.95) 352deg, transparent 360deg)",
+                }}
+              />
+            </div>
 
-            <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-4">
-              {[
-                {
-                  code: "٠١",
-                  label: "أيام",
-                  value: toArabicDigits(countdown.days, 2),
-                  progress: Math.min(100, Math.max(8, (countdown.days / 365) * 100)),
-                },
-                {
-                  code: "٠٢",
-                  label: "ساعات",
-                  value: toArabicDigits(countdown.hours, 2),
-                  progress: Math.max(8, (countdown.hours / 24) * 100),
-                },
-                {
-                  code: "٠٣",
-                  label: "دقائق",
-                  value: toArabicDigits(countdown.minutes, 2),
-                  progress: Math.max(8, (countdown.minutes / 60) * 100),
-                },
-                {
-                  code: "٠٤",
-                  label: "ثواني",
-                  value: toArabicDigits(countdown.seconds, 2),
-                  progress: Math.max(5, (countdown.seconds / 60) * 100),
-                },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  style={{
-                    clipPath:
-                      "polygon(14px 0%, calc(100% - 14px) 0%, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0% calc(100% - 14px), 0% 14px)",
-                  }}
-                  className="group relative flex flex-col justify-between overflow-hidden border border-[#C8A977]/35 bg-gradient-to-b from-[#FFFFFF]/94 via-[#F5F9FE]/88 to-[#E8F1FA]/88 px-4 pt-4 pb-5 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_12px_28px_rgba(30,42,56,0.06)] transition-all duration-300 hover:-translate-y-1.5"
-                >
-                  {/* Top Telemetry Row */}
-                  <div className="flex items-center justify-between text-[10px] font-semibold tracking-widest text-[#7D93AA]">
-                    <span>{item.code}</span>
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#C8A977] shadow-[0_0_8px_#C8A977]" />
-                  </div>
+            {/* Crisp Orbiting Light Beam Around Console Border */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 overflow-hidden rounded-[30px]"
+            >
+              <div
+                className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, rgba(255, 255, 255, 0.35) 0deg, rgba(155, 183, 212, 0.25) 215deg, rgba(255, 255, 255, 1) 262deg, rgba(200, 169, 119, 1) 298deg, rgba(240, 54, 88, 0.85) 332deg, rgba(255, 255, 255, 1) 352deg, rgba(255, 255, 255, 0.35) 360deg)",
+                }}
+              />
+            </div>
 
-                  {/* Center Precision Digital-Glide Numeral */}
-                  <div className="relative my-5 flex h-14 items-center justify-center overflow-hidden sm:h-16">
-                    <AnimatePresence mode="popLayout" initial={false}>
-                      <motion.span
-                        key={item.value}
-                        initial={{ y: 16, opacity: 0, filter: "blur(5px)" }}
-                        animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                        exit={{ y: -16, opacity: 0, filter: "blur(5px)" }}
-                        transition={{ duration: 0.36, ease: LUXURY_EASE }}
-                        className="bg-gradient-to-b from-[#1E2A38] via-[#2F455C] to-[#AE8E5B] bg-clip-text text-5xl font-bold leading-none text-transparent sm:text-[54px]"
-                        style={{ fontFamily: "var(--font-display-ar)" }}
-                      >
-                        {item.value}
-                      </motion.span>
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Unit Label & Live Futuristic Laser Progress Bar */}
-                  <div className="w-full">
-                    <span className="block text-xs font-bold tracking-wider text-[#3B4E62]">
-                      {item.label}
-                    </span>
-                    <div className="mt-2.5 h-[3px] w-full overflow-hidden rounded-full bg-[#9BB7D4]/25">
+            <div className="relative overflow-hidden rounded-[28px] border border-white/60 bg-white/25 p-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_-1px_16px_rgba(255,255,255,0.4)] backdrop-blur-2xl sm:p-6">
+              <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4 sm:gap-4">
+                {[
+                  {
+                    code: "٠١",
+                    label: "أيام",
+                    value: toArabicDigits(countdown.days, 2),
+                    progress: Math.min(100, Math.max(8, (countdown.days / 365) * 100)),
+                    delay: "0s",
+                  },
+                  {
+                    code: "٠٢",
+                    label: "ساعات",
+                    value: toArabicDigits(countdown.hours, 2),
+                    progress: Math.max(8, (countdown.hours / 24) * 100),
+                    delay: "-1.75s",
+                  },
+                  {
+                    code: "٠٣",
+                    label: "دقائق",
+                    value: toArabicDigits(countdown.minutes, 2),
+                    progress: Math.max(8, (countdown.minutes / 60) * 100),
+                    delay: "-3.5s",
+                  },
+                  {
+                    code: "٠٤",
+                    label: "ثواني",
+                    value: toArabicDigits(countdown.seconds, 2),
+                    progress: Math.max(5, (countdown.seconds / 60) * 100),
+                    delay: "-5.25s",
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="group relative rounded-[22px] p-[2px] shadow-[0_14px_34px_rgba(30,42,56,0.08)] transition-transform duration-300 hover:-translate-y-1.5"
+                  >
+                    {/* Soft Outer Luminous Aura Around Each Card */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -inset-1 overflow-hidden rounded-[26px] opacity-60 blur-sm"
+                    >
                       <div
-                        className="h-full rounded-full bg-gradient-to-l from-[#C8A977] via-[#D8A7A0] to-[#9BB7D4] transition-all duration-700 ease-out"
-                        style={{ width: `${item.progress}%` }}
+                        className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                        style={{
+                          animationDelay: item.delay,
+                          background:
+                            "conic-gradient(from 0deg, transparent 0deg, transparent 225deg, rgba(255, 255, 255, 0.95) 268deg, rgba(200, 169, 119, 0.95) 300deg, rgba(240, 54, 88, 0.72) 330deg, rgba(255, 255, 255, 0.95) 352deg, transparent 360deg)",
+                        }}
                       />
                     </div>
+
+                    {/* Crisp Orbiting Light Beam Tracing Card Edges */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px]"
+                    >
+                      <div
+                        className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                        style={{
+                          animationDelay: item.delay,
+                          background:
+                            "conic-gradient(from 0deg, rgba(255, 255, 255, 0.35) 0deg, rgba(155, 183, 212, 0.25) 215deg, rgba(255, 255, 255, 1) 262deg, rgba(200, 169, 119, 1) 298deg, rgba(240, 54, 88, 0.85) 332deg, rgba(255, 255, 255, 1) 352deg, rgba(255, 255, 255, 0.35) 360deg)",
+                        }}
+                      />
+                    </div>
+
+                    {/* Transparent Crystal-Glass Card Surface */}
+                    <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] border border-white/65 bg-white/32 px-4 pt-4 pb-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.95),inset_0_-1px_14px_rgba(255,255,255,0.45)] backdrop-blur-2xl">
+                      {/* Top Telemetry Row */}
+                      <div className="flex items-center justify-between text-[10px] font-semibold tracking-widest text-[#7D93AA]">
+                        <span>{item.code}</span>
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#C8A977] shadow-[0_0_8px_#C8A977]" />
+                      </div>
+
+                      {/* Center Precision Digital-Glide Numeral */}
+                      <div className="relative my-5 flex h-14 items-center justify-center overflow-hidden sm:h-16">
+                        <AnimatePresence mode="popLayout" initial={false}>
+                          <motion.span
+                            key={item.value}
+                            initial={{ y: 16, opacity: 0, filter: "blur(5px)" }}
+                            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                            exit={{ y: -16, opacity: 0, filter: "blur(5px)" }}
+                            transition={{ duration: 0.36, ease: LUXURY_EASE }}
+                            className="bg-gradient-to-b from-[#1E2A38] via-[#2F455C] to-[#AE8E5B] bg-clip-text text-5xl font-bold leading-none text-transparent sm:text-[54px]"
+                            style={{ fontFamily: "var(--font-display-ar)" }}
+                          >
+                            {item.value}
+                          </motion.span>
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Unit Label & Live Futuristic Laser Progress Bar */}
+                      <div className="w-full">
+                        <span className="block text-xs font-bold tracking-wider text-[#3B4E62]">
+                          {item.label}
+                        </span>
+                        <div className="mt-2.5 h-[3px] w-full overflow-hidden rounded-full bg-[#9BB7D4]/25">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-l from-[#C8A977] via-[#D8A7A0] to-[#9BB7D4] transition-all duration-700 ease-out"
+                            style={{ width: `${item.progress}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>
       </section>
 
       {/* =========================================================
-          SECTION 4: EVENT DETAILS (3 Columns Desktop / 1 Mobile)
+          SECTION 4: EVENT DETAILS — ENCHANTED PASSING-LIGHT TIMELINE
          ========================================================= */}
-      <section aria-label="تفاصيل المناسبة" className="px-5 py-16 sm:py-24">
-        <motion.div {...sectionReveal} className="mx-auto max-w-5xl">
+      <section aria-label="تفاصيل المناسبة" className="relative overflow-hidden px-5 py-16 sm:py-24">
+        <motion.div {...sectionReveal} className="relative mx-auto max-w-5xl">
           <div className="text-center">
-            <p className="text-xs font-semibold tracking-[0.18em] text-[#C8A977]">
-              موعدُ لقائنا والفرح
-            </p>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#9BB7D4]/40 bg-white/75 px-4 py-1 text-[11px] font-semibold tracking-[0.2em] text-[#AE8E5B] shadow-xs backdrop-blur-md">
+              <Sparkles className="h-3 w-3 text-[#C8A977]" />
+              <span>برنامج ليلة الفرح</span>
+              <Sparkles className="h-3 w-3 text-[#C8A977]" />
+            </span>
             <h2
-              className="mt-2 text-3xl font-bold text-[#1E2A38] sm:text-4xl"
+              className="mt-3 text-3xl font-bold text-[#1E2A38] sm:text-4xl"
               style={{ fontFamily: "var(--font-display-ar)" }}
             >
               تفاصيل المناسبة
             </h2>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {/* Date Card */}
-            <div className="winter-glass flex flex-col items-center rounded-[24px] px-6 py-9 text-center transition-transform duration-300 hover:-translate-y-2">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#C8A977]/35 bg-[#F7FAFD] text-[#C8A977]">
-                <Calendar className="h-6 w-6" />
-              </div>
-              <span className="mt-5 text-xs font-semibold tracking-wider text-[#7D93AA]">
-                التاريخ
-              </span>
-              <h3
-                className="mt-2 text-2xl font-bold text-[#1E2A38]"
-                style={{ fontFamily: "var(--font-display-ar)" }}
-              >
-                {event.gregorianDisplayAr}
-              </h3>
-              <p className="mt-1 text-sm font-medium text-[#4F6073]">
-                {event.dayLabelAr}
-              </p>
-              {hijriDisplay && (
-                <p className="mt-1 text-xs text-[#7D93AA]">{hijriDisplay}</p>
+          {/* Interactive Passing-Comet Luminous Timeline */}
+          <div className="relative mt-14">
+            {/* Desktop Horizontal Luminous Track + Gliding Comet (RTL: Right -> Left) */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-[54px] right-[12%] left-[12%] hidden h-[3px] overflow-visible rounded-full bg-gradient-to-l from-[#C8A977]/25 via-[#9BB7D4]/45 to-[#D82648]/25 md:block"
+            >
+              {!prefersReduced && (
+                <>
+                  {/* Continuous Flowing Golden-Crystal Light Stream */}
+                  <motion.div
+                    initial={{ right: "0%", opacity: 0 }}
+                    animate={{
+                      right: ["0%", "100%"],
+                      opacity: [0, 1, 1, 0],
+                    }}
+                    transition={{
+                      duration: 4.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute top-1/2 h-[4px] w-28 -translate-y-1/2 rounded-full bg-gradient-to-l from-transparent via-white to-[#F03658] shadow-[0_0_16px_rgba(255,255,255,1),0_0_28px_rgba(200,169,119,0.95)]"
+                  />
+                  {/* Glowing Star Orb Riding the Track */}
+                  <motion.div
+                    initial={{ right: "0%" }}
+                    animate={{ right: ["0%", "100%"] }}
+                    transition={{
+                      duration: 4.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full bg-white shadow-[0_0_14px_#FFFFFF,0_0_26px_#C8A977,0_0_38px_#F03658]"
+                  />
+                </>
               )}
+            </div>
+
+            {/* Mobile Vertical Luminous Track + Gliding Comet */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-10 bottom-10 right-7 w-[3px] overflow-hidden rounded-full bg-gradient-to-b from-[#C8A977]/25 via-[#9BB7D4]/45 to-[#D82648]/25 md:hidden"
+            >
+              {!prefersReduced && (
+                <motion.div
+                  initial={{ top: "-10%" }}
+                  animate={{ top: ["0%", "100%"] }}
+                  transition={{
+                    duration: 4.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-1/2 h-24 w-[4px] -translate-x-1/2 rounded-full bg-gradient-to-b from-transparent via-white to-[#F03658] shadow-[0_0_16px_#FFFFFF,0_0_26px_#C8A977]"
+                />
+              )}
+            </div>
+
+            <div className="relative z-10 grid grid-cols-1 gap-6 pr-12 md:grid-cols-3 md:gap-7 md:pr-0">
+              {EVENING_PROGRAM.map((stage, idx) => {
+                const isActive = activeStage === idx;
+                const StageIcon = stage.Icon;
+
+                return (
+                  <motion.div
+                    key={stage.title}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    transition={{
+                      duration: 0.85,
+                      delay: idx * 0.16,
+                      ease: LUXURY_EASE,
+                    }}
+                    onMouseEnter={() => setActiveStage(idx)}
+                    onClick={() => setActiveStage(idx)}
+                    className="relative cursor-pointer"
+                  >
+                    {/* Mobile Timeline Node Dot */}
+                    <div
+                      aria-hidden="true"
+                      className={`absolute top-1/2 -right-8 z-20 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border-2 transition-all duration-500 md:hidden ${
+                        isActive
+                          ? "scale-125 border-white bg-[#D82648] shadow-[0_0_18px_rgba(240,54,88,0.85)]"
+                          : "border-white/80 bg-[#C8A977]/80"
+                      }`}
+                    >
+                      <span className="h-2 w-2 rounded-full bg-white" />
+                    </div>
+
+                    {/* Floating Animated Card Wrapper */}
+                    <motion.div
+                      animate={
+                        isActive && !prefersReduced
+                          ? { y: -8, scale: 1.02 }
+                          : { y: 0, scale: 1 }
+                      }
+                      transition={{ duration: 0.6, ease: LUXURY_EASE }}
+                      className="relative rounded-[26px] p-[2px] shadow-[0_20px_50px_rgba(30,42,56,0.09)]"
+                    >
+                      {/* Soft Outer Luminous Aura */}
+                      <div
+                        aria-hidden="true"
+                        className={`pointer-events-none absolute -inset-1.5 overflow-hidden rounded-[30px] blur-md transition-opacity duration-500 ${
+                          isActive ? "opacity-85" : "opacity-35"
+                        }`}
+                      >
+                        <div
+                          className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                          style={{
+                            animationDelay: stage.delay,
+                            background:
+                              "conic-gradient(from 0deg, transparent 0deg, transparent 225deg, rgba(255, 255, 255, 0.95) 268deg, rgba(200, 169, 119, 0.98) 300deg, rgba(240, 54, 88, 0.85) 330deg, rgba(255, 255, 255, 0.95) 352deg, transparent 360deg)",
+                          }}
+                        />
+                      </div>
+
+                      {/* Crisp Orbiting Edge Light */}
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 overflow-hidden rounded-[26px]"
+                      >
+                        <div
+                          className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                          style={{
+                            animationDelay: stage.delay,
+                            background:
+                              "conic-gradient(from 0deg, rgba(255, 255, 255, 0.35) 0deg, rgba(155, 183, 212, 0.25) 215deg, rgba(255, 255, 255, 1) 262deg, rgba(200, 169, 119, 1) 298deg, rgba(240, 54, 88, 0.9) 332deg, rgba(255, 255, 255, 1) 352deg, rgba(255, 255, 255, 0.35) 360deg)",
+                          }}
+                        />
+                      </div>
+
+                      {/* Transparent Crystal-Glass Card Interior */}
+                      <div className="relative flex flex-col items-center overflow-hidden rounded-[24px] border border-white/70 bg-white/36 px-6 py-8 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.95),inset_0_-1px_16px_rgba(255,255,255,0.45)] backdrop-blur-2xl">
+                        {/* Passing Diagonal Crystal Light Sweep When Active */}
+                        {!prefersReduced && isActive && (
+                          <motion.div
+                            key={`sheen-${activeStage}`}
+                            aria-hidden="true"
+                            initial={{ x: "140%", opacity: 0 }}
+                            animate={{ x: "-140%", opacity: [0, 0.85, 0] }}
+                            transition={{ duration: 1.4, ease: LUXURY_EASE }}
+                            className="pointer-events-none absolute inset-y-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/70 to-transparent"
+                          />
+                        )}
+
+                        {/* Step Number Pill */}
+                        <span className="text-[11px] font-bold tracking-[0.24em] text-[#AE8E5B]">
+                          ✦ {stage.step} ✦
+                        </span>
+
+                        {/* 3D Ruby-Glass Emblem with Blooming Halo */}
+                        <div className="relative mt-4 flex h-16 w-16 items-center justify-center">
+                          {!prefersReduced && isActive && (
+                            <motion.span
+                              initial={{ scale: 0.85, opacity: 0.7 }}
+                              animate={{ scale: 1.5, opacity: 0 }}
+                              transition={{
+                                duration: 1.6,
+                                repeat: Infinity,
+                                ease: "easeOut",
+                              }}
+                              className="pointer-events-none absolute inset-0 rounded-[20px] border-2 border-[#F03658]/60"
+                            />
+                          )}
+                          <div className="ruby-glass-keycap flex h-16 w-16 items-center justify-center rounded-[18px]">
+                            <StageIcon className="h-7 w-7 text-white drop-shadow-xs" />
+                          </div>
+                        </div>
+
+                        {/* Stage Title */}
+                        <h3
+                          className="mt-5 text-3xl font-bold text-[#1E2A38]"
+                          style={{ fontFamily: "var(--font-calligraphy)" }}
+                        >
+                          {stage.title}
+                        </h3>
+
+                        {/* Luminous Time Capsule */}
+                        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#C8A977]/45 bg-white/75 px-5 py-1.5 shadow-[0_6px_18px_rgba(30,42,56,0.06)] backdrop-blur-md">
+                          <Clock className="h-4 w-4 text-[#D82648]" />
+                          <span
+                            className="text-lg font-bold text-[#1E2A38]"
+                            style={{ fontFamily: "var(--font-display-ar)" }}
+                          >
+                            الساعة {stage.time}
+                          </span>
+                        </div>
+
+                        {/* Poetic Subtitle */}
+                        <p className="mt-3.5 text-sm font-medium text-[#4F6073]">
+                          {stage.subtitle}
+                        </p>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Compact Crystal-Glass Date & Venue Quick-Action Strip */}
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-wrap items-center justify-between gap-4 rounded-[22px] border border-white/70 bg-white/38 px-5 py-4 shadow-[0_12px_32px_rgba(30,42,56,0.06)] backdrop-blur-2xl">
+              <div className="flex items-center gap-3.5 text-right">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#C8A977]/40 bg-white/80 text-[#C8A977]">
+                  <Calendar className="h-5 w-5" />
+                </div>
+                <div>
+                  <p
+                    className="text-base font-bold text-[#1E2A38]"
+                    style={{ fontFamily: "var(--font-display-ar)" }}
+                  >
+                    {event.dayLabelAr} · {event.gregorianDisplayAr}
+                  </p>
+                  {hijriDisplay && (
+                    <p className="text-xs text-[#64788E]">{hijriDisplay}</p>
+                  )}
+                </div>
+              </div>
               <button
                 type="button"
                 onClick={downloadWeddingIcsFile}
-                className="ruby-glass-keycap mt-5 inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold"
+                className="ruby-glass-keycap inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold"
               >
                 <CalendarPlus className="h-3.5 w-3.5 text-[#FFE6EC]" />
                 <span>حفظ بالتقويم</span>
               </button>
             </div>
 
-            {/* Time Card */}
-            <div className="winter-glass flex flex-col items-center rounded-[24px] px-6 py-9 text-center transition-transform duration-300 hover:-translate-y-2">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#C8A977]/35 bg-[#F7FAFD] text-[#C8A977]">
-                <Clock className="h-6 w-6" />
+            <div className="flex flex-wrap items-center justify-between gap-4 rounded-[22px] border border-white/70 bg-white/38 px-5 py-4 shadow-[0_12px_32px_rgba(30,42,56,0.06)] backdrop-blur-2xl">
+              <div className="flex items-center gap-3.5 text-right">
+                <div className="ruby-glass-keycap flex h-11 w-11 shrink-0 items-center justify-center rounded-[13px]">
+                  <MapPin className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p
+                    className="text-base font-bold text-[#1E2A38]"
+                    style={{ fontFamily: "var(--font-display-ar)" }}
+                  >
+                    {venue.name}
+                  </p>
+                  <p className="text-xs text-[#64788E]">{venue.cityDistrict}</p>
+                </div>
               </div>
-              <span className="mt-5 text-xs font-semibold tracking-wider text-[#7D93AA]">
-                الوقت
-              </span>
-              <h3
-                className="mt-2 text-2xl font-bold text-[#1E2A38]"
-                style={{ fontFamily: "var(--font-display-ar)" }}
-              >
-                {event.timeDisplayAr}
-              </h3>
-              <p className="mt-2 text-sm font-medium text-[#4F6073]">
-                {event.receptionTimeAr}
-              </p>
-              <p className="mt-1 text-xs text-[#7D93AA]">
-                حضوركم يشرفنا ويسعدنا
-              </p>
-            </div>
-
-            {/* Location Card with 3D Ruby-Glass Keycap GPS Pin */}
-            <div className="winter-glass flex flex-col items-center rounded-[24px] px-6 py-9 text-center transition-transform duration-300 hover:-translate-y-2">
               <a
                 href="#location"
-                aria-label="الانتقال إلى خريطة الموقع"
-                className="ruby-glass-keycap flex h-14 w-14 items-center justify-center rounded-[16px]"
-              >
-                <MapPin className="h-6 w-6 text-white drop-shadow-xs" />
-              </a>
-              <span className="mt-5 text-xs font-semibold tracking-wider text-[#7D93AA]">
-                الموقع
-              </span>
-              <h3
-                className="mt-2 text-2xl font-bold text-[#1E2A38]"
-                style={{ fontFamily: "var(--font-display-ar)" }}
-              >
-                {venue.name}
-              </h3>
-              <p className="mt-2 text-sm font-medium text-[#4F6073]">
-                {venue.cityDistrict}
-              </p>
-              <a
-                href="#location"
-                className="ruby-glass-keycap mt-5 inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold"
+                className="ruby-glass-keycap inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold"
               >
                 <MapPin className="h-3.5 w-3.5 text-[#FFE6EC]" />
                 <span>عرض الخريطة</span>
@@ -363,44 +744,87 @@ export function WinterInvitationSections() {
          ========================================================= */}
       <section
         id="location"
-        aria-label="موقع الاحتفال"
+        aria-label="وجهة لقائنا والفرح"
         className="border-y border-[#9BB7D4]/25 bg-[#EAF1F8]/75 px-5 py-20 backdrop-blur-sm sm:py-24"
       >
         <motion.div {...sectionReveal} className="mx-auto max-w-4xl text-center">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[#C8A977]">
-            وجهة لقائنا والفرح
-          </p>
-          <h2
-            className="mt-2 text-3xl font-bold text-[#1E2A38] sm:text-4xl"
-            style={{ fontFamily: "var(--font-display-ar)" }}
-          >
-            موقع الاحتفال
-          </h2>
-          <p className="mt-2 text-base font-medium text-[#4F6073]">
-            {venue.name} — {venue.cityDistrict}
-          </p>
-
-          {/* Embedded Google Maps Frame with Floating 3D Ruby-Glass GPS Keycap Pin */}
-          <div className="winter-glass mt-8 overflow-hidden rounded-[26px] p-2">
-            <div className="relative h-[320px] w-full overflow-hidden rounded-[20px] bg-[#E2ECF6] sm:h-[380px]">
-              <iframe
-                title={`خريطة ${venue.name}`}
-                src="https://maps.google.com/maps?q=%D9%82%D8%A7%D8%B9%D8%A9%20%D8%B1%D9%8A%D9%85%D8%A7%D8%B3%20%D9%84%D9%84%D8%A7%D8%AD%D8%AA%D9%81%D8%A7%D9%84%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%B4%D9%81%D8%A7%D8%A1&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="h-full w-full border-0"
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center gap-3">
+              <span
+                aria-hidden="true"
+                className="h-[1.5px] w-10 bg-gradient-to-r from-transparent to-[#C8A977] sm:w-16"
               />
-              {/* Floating 3D Ruby-Glass Keycap GPS Badge */}
-              <a
-                href={venue.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`فتح موقع ${venue.name} في خرائط Google`}
-                className="ruby-glass-keycap absolute top-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-[14px]"
-              >
-                <span className="pointer-events-none absolute -inset-2 animate-ping rounded-xl bg-[#F03658]/30" />
-                <MapPin className="relative z-10 h-5 w-5 text-white" />
-              </a>
+              <Sparkles className="h-4 w-4 text-[#C8A977]" />
+              <span
+                aria-hidden="true"
+                className="h-[1.5px] w-10 bg-gradient-to-l from-transparent to-[#C8A977] sm:w-16"
+              />
+            </div>
+
+            <h2
+              className="mt-3 bg-gradient-to-b from-[#1E2A38] via-[#2B3E54] to-[#9E7C47] bg-clip-text text-4xl font-bold leading-snug text-transparent drop-shadow-[0_2px_10px_rgba(255,255,255,0.65)] sm:text-5xl"
+              style={{ fontFamily: "var(--font-calligraphy)" }}
+            >
+              وجهة لقائنا والفرح
+            </h2>
+
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/75 bg-white/55 px-5 py-2 text-sm font-semibold text-[#33465B] shadow-[0_8px_24px_rgba(30,42,56,0.06)] backdrop-blur-xl sm:text-base">
+              <MapPin className="h-4 w-4 shrink-0 text-[#D82648]" />
+              <span>
+                {venue.name} — {venue.cityDistrict}
+              </span>
+            </div>
+          </div>
+
+          {/* Embedded Google Maps Frame with Orbiting Edge Light & Floating 3D Ruby-Glass GPS Keycap Pin */}
+          <div className="relative mt-9 rounded-[28px] p-[2px] shadow-[0_24px_60px_rgba(30,42,56,0.09)]">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-1 overflow-hidden rounded-[32px] opacity-55 blur-md"
+            >
+              <div
+                className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0deg, transparent 225deg, rgba(255, 255, 255, 0.95) 268deg, rgba(200, 169, 119, 0.95) 300deg, rgba(240, 54, 88, 0.72) 330deg, rgba(255, 255, 255, 0.95) 352deg, transparent 360deg)",
+                }}
+              />
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]"
+            >
+              <div
+                className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, rgba(255, 255, 255, 0.35) 0deg, rgba(155, 183, 212, 0.25) 215deg, rgba(255, 255, 255, 1) 262deg, rgba(200, 169, 119, 1) 298deg, rgba(240, 54, 88, 0.85) 332deg, rgba(255, 255, 255, 1) 352deg, rgba(255, 255, 255, 0.35) 360deg)",
+                }}
+              />
+            </div>
+
+            <div className="relative overflow-hidden rounded-[26px] border border-white/65 bg-white/35 p-2 backdrop-blur-2xl">
+              <div className="relative h-[320px] w-full overflow-hidden rounded-[20px] bg-[#E2ECF6] sm:h-[380px]">
+                <iframe
+                  title={`خريطة ${venue.name}`}
+                  src="https://maps.google.com/maps?q=%D9%82%D8%A7%D8%B9%D8%A9%20%D8%B1%D9%8A%D9%85%D8%A7%D8%B3%20%D9%84%D9%84%D8%A7%D8%AD%D8%AA%D9%81%D8%A7%D9%84%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%B4%D9%81%D8%A7%D8%A1&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="h-full w-full border-0"
+                />
+                {/* Floating 3D Ruby-Glass Keycap GPS Badge */}
+                <a
+                  href={venue.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`فتح موقع ${venue.name} في خرائط Google`}
+                  className="ruby-glass-keycap absolute top-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-[14px]"
+                >
+                  <span className="pointer-events-none absolute -inset-2 animate-ping rounded-xl bg-[#F03658]/30" />
+                  <MapPin className="relative z-10 h-5 w-5 text-white" />
+                </a>
+              </div>
             </div>
           </div>
 

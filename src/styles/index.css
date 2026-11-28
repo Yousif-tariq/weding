@@ -13,9 +13,9 @@
   --color-champagne-deep: #AE8E5B;
   --color-rose-frost: #D8A7A0;
 
-  --font-calligraphy: "Aref Ruqaa", serif;
-  --font-display-ar: "Noto Naskh Arabic", serif;
-  --font-body-ar: "IBM Plex Sans Arabic", sans-serif;
+  --font-calligraphy: "Aref Ruqaa", "Amiri", serif;
+  --font-display-ar: "Amiri", "El Messiri", serif;
+  --font-body-ar: "El Messiri", "Amiri", serif;
 }
 
 @layer base {
@@ -215,12 +215,29 @@
   animation: snowFloatSlow linear infinite;
 }
 
+/* Enchanted Orbiting Light Beam Around Transparent Crystal-Glass Card */
+@keyframes borderLightOrbit {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.orbit-light-ring {
+  animation: borderLightOrbit 7s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .snow-mote {
+  .snow-mote,
+  .orbit-light-ring {
     animation: none !important;
+  }
+  .snow-mote {
     display: none;
   }
 }
