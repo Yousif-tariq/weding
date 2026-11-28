@@ -12,17 +12,12 @@ import { WHITE_JOY_CONFIG } from "./config/whiteJoyConfig";
 import { LUXURY_EASE } from "./animations/motionPresets";
 
 export function App() {
-  const [opened, setOpened] = useState(false);
+  const [opened] = useState(true);
   const [isPastVerseSection, setIsPastVerseSection] = useState(false);
 
   // Automatically pause music while on the Quranic verse hero section,
   // and start playing smoothly as soon as the guest scrolls to the next section
   useEffect(() => {
-    if (!opened) {
-      setIsPastVerseSection(false);
-      return;
-    }
-
     const checkScrollPosition = () => {
       const heroEl = document.getElementById("hero-verse");
       if (!heroEl) return;
@@ -38,15 +33,29 @@ export function App() {
       window.removeEventListener("scroll", checkScrollPosition);
       window.removeEventListener("resize", checkScrollPosition);
     };
-  }, [opened]);
+  }, []);
+
+  // Automatically glide up from the Quranic verse screen to the invitation card
+  // 3 seconds after the curtain parts and the verse page appears
+  useEffect(() => {
+    const autoScrollTimer = window.setTimeout(() => {
+      if (window.scrollY < 80) {
+        document
+          .getElementById("invitation")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 6200);
+
+    return () => window.clearTimeout(autoScrollTimer);
+  }, []);
 
   return (
     <main className="relative min-h-[100dvh] w-full overflow-x-clip bg-[#F7FAFD] text-[#1E2A38]">
-      {/* Enchanted Ruby-Red Crystal Glass Curtain (Opens Automatically After 2 Seconds) */}
+      {/* Transparent Crystal-Glass Snow Curtain (Opens Automatically After 2 Seconds) */}
       <RubyCrystalCurtain />
 
-      {/* Lightweight Winter Snow Frost Glow & Gentle Snowfall Motes */}
-      <WinterSnowAmbiance />
+      {/* Lightweight Winter Snow Frost Glow & Ambient Post-Open Crystal Light */}
+      <WinterSnowAmbiance active={opened} />
 
       {/* Ambient Wedding Soundtrack — Pauses Automatically on the Quranic Verse Section */}
       {WHITE_JOY_CONFIG.media.ambientMusicUrl && (
@@ -57,22 +66,20 @@ export function App() {
         />
       )}
 
-      {/* Futuristic Gateway Hero (First Screen) -> Unlocks Full Invitation */}
+      {/* Futuristic Gateway Hero (First Screen) -> Auto-Glides to Full Invitation */}
       <div className="relative z-10">
-        <WinterHeroSection opened={opened} onOpen={() => setOpened(true)} />
+        <WinterHeroSection />
 
         <AnimatePresence>
-          {opened && (
-            <motion.div
-              key="winter-invitation-body"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.95, ease: LUXURY_EASE }}
-            >
-              <WinterInvitationCardSection />
-              <WinterInvitationSections />
-            </motion.div>
-          )}
+          <motion.div
+            key="winter-invitation-body"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.95, ease: LUXURY_EASE }}
+          >
+            <WinterInvitationCardSection />
+            <WinterInvitationSections />
+          </motion.div>
         </AnimatePresence>
       </div>
     </main>

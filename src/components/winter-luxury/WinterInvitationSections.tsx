@@ -8,7 +8,6 @@ import {
   Heart,
   MapPin,
   MessageCircle,
-  Navigation,
   Sparkles,
   Utensils,
 } from "lucide-react";
@@ -43,11 +42,10 @@ export function WinterInvitationCardSection() {
   const inView = useInView(sectionRef, { once: true, amount: 0.25 });
   const prefersReduced = Boolean(useReducedMotion());
 
-  const fam1 = brand.families[0];
-  const joiner = "و";
-  const fam2 = brand.families[1];
   const bodyMsg = chapters.welcome.message;
-  const totalChars = fam1.length + joiner.length + fam2.length + bodyMsg.length;
+  const fam1 = brand.families[0];
+  const fam2 = `و${brand.families[1]}`;
+  const totalChars = bodyMsg.length + fam1.length + fam2.length;
 
   const [typedChars, setTypedChars] = useState(prefersReduced ? totalChars : 0);
 
@@ -68,11 +66,17 @@ export function WinterInvitationCardSection() {
       count += 1;
       setTypedChars(count);
 
-      // Gentle poetic cadence: brief pause after each family line
-      const atEndFam1 = count === fam1.length;
-      const atEndJoiner = count === fam1.length + joiner.length;
-      const atEndFam2 = count === fam1.length + joiner.length + fam2.length;
-      const delay = atEndFam1 || atEndFam2 ? 240 : atEndJoiner ? 160 : 34;
+      // Poetic calligraphic cadence: gentle breath after punctuation and between sections
+      const atEndBody = count === bodyMsg.length;
+      const atEndFam1 = count === bodyMsg.length + fam1.length;
+      const currentChar = count <= bodyMsg.length ? bodyMsg[count - 1] : "";
+      const delay = atEndBody
+        ? 360
+        : atEndFam1
+        ? 220
+        : currentChar === "،" || currentChar === "."
+        ? 110
+        : 28;
 
       timer = window.setTimeout(step, delay);
     };
@@ -82,26 +86,21 @@ export function WinterInvitationCardSection() {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [inView, prefersReduced, totalChars, fam1.length, joiner.length, fam2.length]);
+  }, [inView, prefersReduced, totalChars, bodyMsg, fam1.length]);
 
-  const fam1Text = fam1.slice(0, Math.min(typedChars, fam1.length));
-  const joinerOffset = Math.max(0, typedChars - fam1.length);
-  const joinerText = joiner.slice(0, Math.min(joinerOffset, joiner.length));
-  const fam2Offset = Math.max(0, typedChars - fam1.length - joiner.length);
+  const bodyText = bodyMsg.slice(0, Math.min(typedChars, bodyMsg.length));
+  const fam1Offset = Math.max(0, typedChars - bodyMsg.length);
+  const fam1Text = fam1.slice(0, Math.min(fam1Offset, fam1.length));
+  const fam2Offset = Math.max(0, typedChars - bodyMsg.length - fam1.length);
   const fam2Text = fam2.slice(0, Math.min(fam2Offset, fam2.length));
-  const bodyOffset = Math.max(
-    0,
-    typedChars - fam1.length - joiner.length - fam2.length
-  );
-  const bodyText = bodyMsg.slice(0, Math.min(bodyOffset, bodyMsg.length));
   const isTypingDone = typedChars >= totalChars;
-  const showDivider = typedChars >= fam1.length + joiner.length + fam2.length;
+  const showDivider = typedChars >= bodyMsg.length;
 
   return (
     <section
       ref={sectionRef}
       id="invitation"
-      aria-label="دعوة كريمة"
+      aria-label="دعوة فرح كريمة"
       className="relative z-10 flex min-h-[100dvh] w-full items-center justify-center px-5 pt-20 pb-14 sm:py-20"
     >
       <motion.div
@@ -173,49 +172,30 @@ export function WinterInvitationCardSection() {
         )}
 
         {/* Enchanted Live-Written Invitation Typography */}
-        <div className="relative z-10 mx-auto max-w-2xl px-2 py-2 text-center sm:px-4">
+        <div className="relative z-10 mx-auto max-w-2xl px-2 py-3 text-center sm:px-5">
             <span
-              className="ruby-glass-keycap inline-flex items-center gap-2.5 rounded-[18px] px-7 py-2.5 text-2xl font-bold tracking-wide sm:text-3xl"
+              className="ruby-glass-keycap inline-flex items-center gap-3 rounded-[20px] px-8 py-3 text-2xl font-bold tracking-wide sm:text-4xl"
               style={{ fontFamily: "var(--font-calligraphy)" }}
             >
-              <span className="text-base text-[#FFE3EA]">✦</span>
-              <span>دعوة كريمة</span>
-              <span className="text-base text-[#FFE3EA]">✦</span>
+              <span className="text-lg text-[#FFE3EA]">✦</span>
+              <span>دعوة فرح كريمة</span>
+              <span className="text-lg text-[#FFE3EA]">✦</span>
             </span>
 
-            <div className="mt-6 flex min-h-[116px] flex-col items-center gap-1.5" aria-live="polite">
+            {/* Royal Poetic Invitation Message with Live Calligraphic Writing */}
+            <div className="mt-8 min-h-[180px] sm:min-h-[195px]" aria-live="polite">
               <p
-                className="text-2xl font-bold text-[#1E2A38] sm:text-3xl"
-                style={{ fontFamily: "var(--font-display-ar)" }}
+                className="mx-auto max-w-xl bg-gradient-to-b from-[#1A2636] via-[#283B52] to-[#4A2E3F] bg-clip-text text-[22px] leading-[2.25] font-semibold text-transparent drop-shadow-[0_1px_1px_rgba(255,255,255,0.65)] sm:text-[27px] sm:leading-[2.3]"
+                style={{ fontFamily: '"Scheherazade New", "Amiri", serif' }}
               >
-                {fam1Text}
-                {typedChars > 0 && typedChars < fam1.length && (
-                  <span className="mr-1 inline-block h-[0.95em] w-[2px] translate-y-1 animate-pulse bg-[#D82648]" />
+                {bodyText}
+                {typedChars > 0 && typedChars < bodyMsg.length && (
+                  <span className="mr-1.5 inline-block h-[0.95em] w-[2.5px] translate-y-1.5 animate-pulse rounded-full bg-gradient-to-b from-[#D82648] to-[#C8A977] shadow-[0_0_12px_rgba(216,38,72,0.85)]" />
                 )}
               </p>
-
-              {joinerText && (
-                <span
-                  className="text-lg font-bold text-[#C8A977]"
-                  style={{ fontFamily: "var(--font-display-ar)" }}
-                >
-                  {joinerText}
-                </span>
-              )}
-
-              {fam2Text && (
-                <p
-                  className="text-2xl font-bold text-[#1E2A38] sm:text-3xl"
-                  style={{ fontFamily: "var(--font-display-ar)" }}
-                >
-                  {fam2Text}
-                  {fam2Offset > 0 && fam2Offset < fam2.length && (
-                    <span className="mr-1 inline-block h-[0.95em] w-[2px] translate-y-1 animate-pulse bg-[#D82648]" />
-                  )}
-                </p>
-              )}
             </div>
 
+            {/* Ornamental Champagne-Gold & Sparkle Divider */}
             <motion.div
               aria-hidden="true"
               initial={{ scaleX: 0, opacity: 0 }}
@@ -225,15 +205,41 @@ export function WinterInvitationCardSection() {
                   : { scaleX: 0, opacity: 0 }
               }
               transition={{ duration: 0.75, ease: LUXURY_EASE }}
-              className="mx-auto my-5 h-[1.5px] w-32 bg-gradient-to-r from-transparent via-[#C8A977] to-transparent"
-            />
+              className="mx-auto my-6 flex items-center justify-center gap-3"
+            >
+              <span className="h-[1.5px] w-16 bg-gradient-to-r from-transparent via-[#C8A977] to-[#D82648]/60 sm:w-24" />
+              <span className="text-sm text-[#C8A977] drop-shadow-[0_0_8px_rgba(200,169,119,0.8)]">
+                ✦
+              </span>
+              <span className="h-[1.5px] w-16 bg-gradient-to-l from-transparent via-[#C8A977] to-[#D82648]/60 sm:w-24" />
+            </motion.div>
 
-            <p className="mx-auto min-h-[108px] max-w-xl text-base leading-[2.15] font-medium text-[#2B3746] sm:text-lg">
-              {bodyText}
-              {bodyOffset > 0 && !isTypingDone && (
-                <span className="mr-1 inline-block h-[1em] w-[2px] translate-y-1 animate-pulse bg-[#D82648] shadow-[0_0_8px_#D82648]" />
+            {/* Families Signature in Enchanted Royal Calligraphy */}
+            <div className="flex min-h-[104px] flex-col items-center gap-2.5">
+              {fam1Text && (
+                <p
+                  className="bg-gradient-to-l from-[#8F6B32] via-[#1E2A38] to-[#9E243F] bg-clip-text text-[26px] font-bold leading-relaxed text-transparent drop-shadow-[0_2px_10px_rgba(255,255,255,0.65)] sm:text-[34px]"
+                  style={{ fontFamily: "var(--font-calligraphy)" }}
+                >
+                  {fam1Text}
+                  {fam1Offset > 0 && fam1Offset < fam1.length && (
+                    <span className="mr-1.5 inline-block h-[0.9em] w-[2.5px] translate-y-1 animate-pulse rounded-full bg-[#D82648] shadow-[0_0_10px_#D82648]" />
+                  )}
+                </p>
               )}
-            </p>
+
+              {fam2Text && (
+                <p
+                  className="bg-gradient-to-r from-[#8F6B32] via-[#1E2A38] to-[#9E243F] bg-clip-text text-[26px] font-bold leading-relaxed text-transparent drop-shadow-[0_2px_10px_rgba(255,255,255,0.65)] sm:text-[34px]"
+                  style={{ fontFamily: "var(--font-calligraphy)" }}
+                >
+                  {fam2Text}
+                  {fam2Offset > 0 && !isTypingDone && (
+                    <span className="mr-1.5 inline-block h-[0.9em] w-[2.5px] translate-y-1 animate-pulse rounded-full bg-[#D82648] shadow-[0_0_10px_#D82648]" />
+                  )}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </motion.div>
@@ -727,13 +733,26 @@ export function WinterInvitationSections() {
                   <p className="text-xs text-[#64788E]">{venue.cityDistrict}</p>
                 </div>
               </div>
-              <a
-                href="#location"
-                className="ruby-glass-keycap inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold"
-              >
-                <MapPin className="h-3.5 w-3.5 text-[#FFE6EC]" />
-                <span>عرض الخريطة</span>
-              </a>
+              <div className="flex flex-col items-stretch gap-2.5 sm:items-end">
+                <a
+                  href="#location"
+                  className="ruby-glass-keycap inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-bold"
+                >
+                  <MapPin className="h-3.5 w-3.5 text-[#FFE6EC]" />
+                  <span>عرض الخريطة</span>
+                </a>
+                <a
+                  href={`https://wa.me/${venue.whatsappNumber}?text=${encodeURIComponent(
+                    `السلام عليكم، بخصوص دعوة زفاف ${brand.groomAr} و ${brand.brideAr} في ${venue.name}: `
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ruby-glass-keycap inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-bold"
+                >
+                  <MessageCircle className="h-3.5 w-3.5 text-[#FFE6EC]" />
+                  <span>للتواصل أو الاعتذار</span>
+                </a>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -745,7 +764,7 @@ export function WinterInvitationSections() {
       <section
         id="location"
         aria-label="وجهة لقائنا والفرح"
-        className="border-y border-[#9BB7D4]/25 bg-[#EAF1F8]/75 px-5 py-20 backdrop-blur-sm sm:py-24"
+        className="border-y border-white/45 bg-white/15 px-5 py-20 backdrop-blur-[2px] sm:py-24"
       >
         <motion.div {...sectionReveal} className="mx-auto max-w-4xl text-center">
           <div className="flex flex-col items-center">
@@ -827,55 +846,162 @@ export function WinterInvitationSections() {
               </div>
             </div>
           </div>
-
-          {/* Primary Directions & WhatsApp Contact/Apology 3D Ruby-Glass Keycap Buttons */}
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href={venue.mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ruby-glass-keycap inline-flex w-full items-center justify-center gap-2.5 px-10 py-3.5 text-base font-bold sm:w-auto"
-            >
-              <Navigation className="h-4 w-4 text-[#FFE6EC]" />
-              <span>عرض الاتجاهات</span>
-            </a>
-
-            <a
-              href={`https://wa.me/${venue.whatsappNumber}?text=${encodeURIComponent(
-                `السلام عليكم، بخصوص دعوة زفاف ${brand.groomAr} و ${brand.brideAr} في ${venue.name}: `
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ruby-glass-keycap inline-flex w-full items-center justify-center gap-2.5 px-9 py-3.5 text-base font-bold sm:w-auto"
-            >
-              <MessageCircle className="h-4 w-4 text-[#FFE6EC]" />
-              <span>للتواصل أو الاعتذار</span>
-            </a>
-          </div>
         </motion.div>
       </section>
 
       {/* =========================================================
-          SECTION 6: MINIMALIST FOOTER
+          SECTION 6: ENCHANTED CRYSTAL-GLASS GRAND FINALE FOOTER
          ========================================================= */}
-      <footer className="border-t border-[#9BB7D4]/25 bg-white/45 px-5 py-14 text-center backdrop-blur-sm">
-        <p
-          className="text-4xl font-bold text-[#1E2A38]"
-          style={{ fontFamily: "var(--font-calligraphy)" }}
+      <footer className="relative overflow-hidden px-5 pt-16 pb-20 text-center sm:pt-24 sm:pb-24">
+        {/* Soft Ambient Frost & Champagne Horizon Glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-80 bg-radial from-[#C8A977]/20 via-[#9BB7D4]/20 to-transparent blur-3xl"
+        />
+
+        <motion.div
+          {...sectionReveal}
+          className="relative z-10 mx-auto max-w-2xl rounded-[32px] p-[2.5px] shadow-[0_28px_72px_rgba(30,42,56,0.10)]"
         >
-          {brand.groomAr}{" "}
-          <span className="text-[#C8A977]">&amp;</span>{" "}
-          {brand.brideAr}
-        </p>
-        <p
-          className="mt-3 text-base font-medium text-[#AE8E5B]"
-          style={{ fontFamily: "var(--font-display-ar)" }}
-        >
-          {event.dayLabelAr} · {event.gregorianDisplayAr}
-        </p>
-        <p className="mt-3 text-sm text-[#5A6B7C]">
-          «ننتظركم لتشاركونا أجمل لحظات حياتنا»
-        </p>
+          {/* Soft Outer Luminous Aura Around Footer Medallion */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-1.5 overflow-hidden rounded-[36px] opacity-65 blur-md"
+          >
+            <div
+              className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, transparent 0deg, transparent 225deg, rgba(255, 255, 255, 0.95) 268deg, rgba(200, 169, 119, 0.98) 300deg, rgba(240, 54, 88, 0.78) 330deg, rgba(255, 255, 255, 0.95) 352deg, transparent 360deg)",
+              }}
+            />
+          </div>
+
+          {/* Crisp Orbiting Edge Light Beam */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-[32px]"
+          >
+            <div
+              className="orbit-light-ring absolute top-1/2 left-1/2 h-[220%] w-[220%]"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, rgba(255, 255, 255, 0.35) 0deg, rgba(155, 183, 212, 0.25) 215deg, rgba(255, 255, 255, 1) 262deg, rgba(200, 169, 119, 1) 298deg, rgba(240, 54, 88, 0.88) 332deg, rgba(255, 255, 255, 1) 352deg, rgba(255, 255, 255, 0.35) 360deg)",
+              }}
+            />
+          </div>
+
+          {/* Transparent Crystal-Glass Finale Interior */}
+          <div className="relative overflow-hidden rounded-[30px] border border-white/70 bg-white/36 px-6 py-12 shadow-[inset_0_1px_1px_rgba(255,255,255,0.95),inset_0_-1px_18px_rgba(255,255,255,0.45)] backdrop-blur-2xl sm:px-12 sm:py-14">
+            {/* Gentle Falling Pure-White Snowflakes Inside Finale Card */}
+            {!prefersReduced && (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 overflow-hidden"
+              >
+                {CARD_SNOWFLAKES.slice(0, 6).map((flake, idx) => (
+                  <motion.span
+                    key={`footer-snow-${idx}`}
+                    initial={{ y: "-10%", x: 0, opacity: 0 }}
+                    animate={{
+                      y: "115%",
+                      x: [0, flake.drift, -flake.drift * 0.5],
+                      opacity: [0, 0.9, 0],
+                    }}
+                    transition={{
+                      duration: flake.dur + 1.5,
+                      delay: flake.delay,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                    style={{
+                      left: flake.left,
+                      width: flake.size,
+                      height: flake.size,
+                    }}
+                    className="absolute top-0 rounded-full bg-white shadow-[0_0_10px_#FFFFFF,0_0_18px_rgba(186,216,245,0.85)]"
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* 3D Ruby-Glass Monogram Seal Crest */}
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="relative flex h-16 w-16 items-center justify-center">
+                {!prefersReduced && (
+                  <motion.span
+                    animate={{ scale: [1, 1.38, 1], opacity: [0.55, 0, 0.55] }}
+                    transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                    className="pointer-events-none absolute inset-0 rounded-[20px] border border-[#F03658]/55"
+                  />
+                )}
+                <div
+                  className="ruby-glass-keycap flex h-16 w-16 items-center justify-center rounded-[18px] text-lg font-bold tracking-wide text-white"
+                  style={{ fontFamily: "var(--font-calligraphy)" }}
+                >
+                  {brand.monogramAr}
+                </div>
+              </div>
+
+              {/* Ornamental Crown Divider */}
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <span className="h-[1.5px] w-14 bg-gradient-to-r from-transparent via-[#C8A977] to-[#D82648]/60 sm:w-20" />
+                <Sparkles className="h-4 w-4 text-[#C8A977]" />
+                <span className="h-[1.5px] w-14 bg-gradient-to-l from-transparent via-[#C8A977] to-[#D82648]/60 sm:w-20" />
+              </div>
+
+              {/* Sculpted Radiant Groom & Bride Calligraphy */}
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-4 sm:gap-5">
+                <span
+                  className="bg-gradient-to-b from-[#1A2636] via-[#2B3E54] to-[#9E7C47] bg-clip-text text-5xl font-bold leading-tight text-transparent drop-shadow-[0_3px_14px_rgba(255,255,255,0.75)] sm:text-6xl"
+                  style={{ fontFamily: "var(--font-calligraphy)" }}
+                >
+                  {brand.groomAr}
+                </span>
+
+                <span className="flex h-10 w-10 rotate-45 items-center justify-center rounded-lg border border-[#C8A977]/65 bg-white/75 shadow-[0_6px_20px_rgba(200,169,119,0.28)] backdrop-blur-md">
+                  <span
+                    className="-rotate-45 text-lg font-bold text-[#D82648]"
+                    style={{ fontFamily: "var(--font-display-ar)" }}
+                  >
+                    &amp;
+                  </span>
+                </span>
+
+                <span
+                  className="bg-gradient-to-b from-[#1A2636] via-[#2B3E54] to-[#9E243F] bg-clip-text text-5xl font-bold leading-tight text-transparent drop-shadow-[0_3px_14px_rgba(255,255,255,0.75)] sm:text-6xl"
+                  style={{ fontFamily: "var(--font-calligraphy)" }}
+                >
+                  {brand.brideAr}
+                </span>
+              </div>
+
+              {/* Luminous Crystal Date Capsule */}
+              <div className="mt-6 inline-flex items-center gap-2.5 rounded-full border border-white/80 bg-white/60 px-6 py-2 shadow-[0_8px_24px_rgba(30,42,56,0.06)] backdrop-blur-xl">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#C8A977] shadow-[0_0_8px_#C8A977]" />
+                <p
+                  className="text-base font-bold text-[#1E2A38] sm:text-lg"
+                  style={{ fontFamily: "var(--font-display-ar)" }}
+                >
+                  {event.dayLabelAr} · {event.gregorianDisplayAr}
+                </p>
+                <span className="h-1.5 w-1.5 rounded-full bg-[#D82648] shadow-[0_0_8px_#D82648]" />
+              </div>
+
+              {/* Poetic Royal Closing Verse */}
+              <p
+                className="mt-5 text-xl font-semibold text-[#33465B] sm:text-2xl"
+                style={{ fontFamily: '"Scheherazade New", "Amiri", serif' }}
+              >
+                «ننتظركم لتشاركونا أجمل لحظات حياتنا»
+              </p>
+
+              <span className="mt-4 text-xs font-semibold tracking-[0.22em] text-[#AE8E5B]">
+                ✦ {brand.experienceTitle} ✦
+              </span>
+            </div>
+          </div>
+        </motion.div>
       </footer>
     </div>
   );
