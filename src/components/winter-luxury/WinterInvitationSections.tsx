@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-mot
 import {
   Calendar,
   CalendarPlus,
+  ChevronDown,
   Clock,
   Crown,
   Heart,
@@ -194,7 +195,7 @@ export function WinterInvitationCardSection() {
       ref={sectionRef}
       id="invitation"
       aria-label="دعوة فرح كريمة"
-      className="relative z-10 flex min-h-[100dvh] w-full items-center justify-center px-5 pt-20 pb-14 sm:py-20"
+      className="relative z-10 flex min-h-[100dvh] w-full flex-col items-center justify-center px-5 pt-20 pb-12 sm:py-20"
     >
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -318,6 +319,25 @@ export function WinterInvitationCardSection() {
           </div>
         </div>
       </motion.div>
+
+      {/* Subtle Downward Scroll Cue Below the Invitation Card */}
+      <motion.a
+        href="#countdown"
+        aria-label="التمرير للأسفل"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.8, ease: LUXURY_EASE }}
+        className="mt-7 inline-flex flex-col items-center gap-1.5 text-[#5A6B7C] transition-colors hover:text-[#1E2A38]"
+      >
+        <span className="text-xs font-medium tracking-wide">مرر للأسفل</span>
+        <motion.span
+          animate={prefersReduced ? undefined : { y: [0, 6, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-white/60 text-[#D82648] shadow-[0_8px_22px_rgba(30,42,56,0.08)] backdrop-blur-md"
+        >
+          <ChevronDown className="h-5 w-5" />
+        </motion.span>
+      </motion.a>
     </section>
   );
 }
