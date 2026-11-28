@@ -99,27 +99,36 @@ export function WinterHeroSection() {
             </div>
 
             <p
-              className="relative z-10 mt-3 text-[23px] leading-[2.15] font-semibold text-[#FFFFFF] drop-shadow-[0_2px_14px_rgba(0,0,0,0.48)] sm:text-[29px]"
+              className="relative z-10 mt-3 text-[21px] leading-[2.05] font-semibold text-[#FFFFFF] drop-shadow-[0_2px_14px_rgba(0,0,0,0.48)] sm:text-[26px]"
               style={{ fontFamily: '"Scheherazade New", "Amiri", serif' }}
             >
-              ﴿وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا﴾
+              ﴿وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ﴾
             </p>
           </div>
         </div>
 
         {/* Luminous Couple Names Over Jirtiq Scene */}
-        <div className="relative mt-8 flex w-full max-w-md flex-col items-center sm:mt-10">
-          <h1
-            className="py-1 bg-gradient-to-b from-[#FFFFFF] via-[#FAF0DC] to-[#D9B982] bg-clip-text text-6xl font-bold leading-tight tracking-wide text-transparent drop-shadow-[0_6px_22px_rgba(0,0,0,0.52)] sm:text-8xl"
-            style={{ fontFamily: "var(--font-calligraphy)" }}
-          >
-            {brand.groomAr}
-          </h1>
+        <div className="relative mt-7 flex w-full max-w-md flex-col items-center sm:mt-9">
+          <div className="flex flex-col items-center">
+            <h1
+              className="py-1 bg-gradient-to-b from-[#FFFFFF] via-[#FAF0DC] to-[#D9B982] bg-clip-text text-6xl font-bold leading-tight tracking-wide text-transparent drop-shadow-[0_6px_22px_rgba(0,0,0,0.52)] sm:text-8xl"
+              style={{ fontFamily: "var(--font-calligraphy)" }}
+            >
+              {brand.groomAr}
+            </h1>
+            <span
+              dir="ltr"
+              className="-mt-1 text-xl tracking-wider text-[#F2DEC0]/92 drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)] sm:text-2xl"
+              style={{ fontFamily: '"Great Vibes", "Playfair Display", serif' }}
+            >
+              Mustafa
+            </span>
+          </div>
 
           {/* Precision Laser-Gold Ampersand Diamond Emblem */}
           <div
             aria-hidden="true"
-            className="my-2 flex w-full max-w-[220px] items-center justify-center gap-4 sm:my-2.5"
+            className="my-2.5 flex w-full max-w-[220px] items-center justify-center gap-4 sm:my-3"
           >
             <span className="h-[1px] flex-1 bg-gradient-to-l from-[#F2DEC0] to-transparent" />
             <span className="flex h-9 w-9 rotate-45 items-center justify-center border border-[#F2DEC0]/75 bg-[#0F1E30]/55 shadow-[0_0_16px_rgba(242,222,192,0.3)] backdrop-blur-md">
@@ -133,21 +142,21 @@ export function WinterHeroSection() {
             <span className="h-[1px] flex-1 bg-gradient-to-r from-[#F2DEC0] to-transparent" />
           </div>
 
-          <p
-            className="py-1 bg-gradient-to-b from-[#FFFFFF] via-[#F2F7FC] to-[#C9DCF0] bg-clip-text text-6xl font-bold leading-tight tracking-wide text-transparent drop-shadow-[0_6px_22px_rgba(0,0,0,0.52)] sm:text-8xl"
-            style={{ fontFamily: "var(--font-calligraphy)" }}
-          >
-            {brand.brideAr}
-          </p>
-
-          {/* Subtle Luxury English Couple Names */}
-          <p
-            dir="ltr"
-            className="mt-1 text-2xl tracking-wider text-[#F2DEC0]/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)] sm:text-3xl"
-            style={{ fontFamily: '"Great Vibes", "Playfair Display", serif' }}
-          >
-            Mustafa &amp; Ethar
-          </p>
+          <div className="flex flex-col items-center">
+            <p
+              className="py-1 bg-gradient-to-b from-[#FFFFFF] via-[#F2F7FC] to-[#C9DCF0] bg-clip-text text-6xl font-bold leading-tight tracking-wide text-transparent drop-shadow-[0_6px_22px_rgba(0,0,0,0.52)] sm:text-8xl"
+              style={{ fontFamily: "var(--font-calligraphy)" }}
+            >
+              {brand.brideAr}
+            </p>
+            <span
+              dir="ltr"
+              className="-mt-1 text-xl tracking-wider text-[#DCEBFA]/92 drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)] sm:text-2xl"
+              style={{ fontFamily: '"Great Vibes", "Playfair Display", serif' }}
+            >
+              Ethar
+            </span>
+          </div>
         </div>
 
         {/* Floating Spatial Crystal Date Capsule (Bilingual) */}

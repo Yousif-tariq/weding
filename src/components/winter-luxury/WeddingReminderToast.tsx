@@ -133,12 +133,29 @@ export function WeddingReminderToast() {
 
   const handleEnablePush = async () => {
     setStatus("loading");
+    const withTimeout = <T,>(promise: Promise<T>, ms = 6000): Promise<T> =>
+      new Promise<T>((resolve, reject) => {
+        const timer = window.setTimeout(() => reject(new Error("timeout")), ms);
+        promise.then(
+          (val) => {
+            window.clearTimeout(timer);
+            resolve(val);
+          },
+          (err) => {
+            window.clearTimeout(timer);
+            reject(err);
+          }
+        );
+      });
+
     try {
       const OneSignal = oneSignalRef.current;
       if (OneSignal?.Notifications?.requestPermission) {
-        await OneSignal.Notifications.requestPermission();
+        await withTimeout(OneSignal.Notifications.requestPermission());
         if (OneSignal.Notifications.permission) {
-          await OneSignal.User?.PushSubscription?.optIn?.();
+          if (OneSignal.User?.PushSubscription?.optIn) {
+            await withTimeout(OneSignal.User.PushSubscription.optIn());
+          }
           try {
             localStorage.setItem(STORAGE_KEY, "subscribed");
           } catch {
@@ -149,7 +166,7 @@ export function WeddingReminderToast() {
           return;
         }
       } else if ("Notification" in window) {
-        const perm = await Notification.requestPermission();
+        const perm = await withTimeout(Notification.requestPermission());
         if (perm === "granted") {
           try {
             localStorage.setItem(STORAGE_KEY, "subscribed");
