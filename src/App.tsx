@@ -7,6 +7,7 @@ import {
   WinterInvitationCardSection,
   WinterInvitationSections,
 } from "./components/winter-luxury/WinterInvitationSections";
+import { WeddingReminderToast } from "./components/winter-luxury/WeddingReminderToast";
 import { AmbientMusicController } from "./components/AmbientMusicController";
 import { WHITE_JOY_CONFIG } from "./config/whiteJoyConfig";
 import { LUXURY_EASE } from "./animations/motionPresets";
@@ -65,6 +66,9 @@ export function App() {
           allowed={opened && isPastVerseSection}
         />
       )}
+
+      {/* Smart Wedding-Day Reminder Prompt (Appears at «تفاصيل المناسبة») */}
+      <WeddingReminderToast />
 
       {/* Futuristic Gateway Hero (First Screen) -> Auto-Glides to Full Invitation */}
       <div className="relative z-10">

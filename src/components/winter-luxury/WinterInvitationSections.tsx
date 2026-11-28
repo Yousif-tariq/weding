@@ -505,7 +505,7 @@ export function WinterInvitationSections() {
       {/* =========================================================
           SECTION 4: EVENT DETAILS — ENCHANTED PASSING-LIGHT TIMELINE
          ========================================================= */}
-      <section aria-label="تفاصيل المناسبة" className="relative overflow-hidden px-5 py-16 sm:py-24">
+      <section id="details" aria-label="تفاصيل المناسبة" className="relative overflow-hidden px-5 py-16 sm:py-24">
         <motion.div {...sectionReveal} className="relative mx-auto max-w-5xl">
           <div className="text-center">
             <h2

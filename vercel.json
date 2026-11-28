@@ -5,11 +5,24 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!assets/|images/|video/|audio/|favicon).*)",
+      "source": "/((?!assets/|images/|video/|audio/|favicon|OneSignalSDKWorker\\.js|manifest\\.json).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/OneSignalSDKWorker.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
     {
       "source": "/assets/(.*)",
       "headers": [
